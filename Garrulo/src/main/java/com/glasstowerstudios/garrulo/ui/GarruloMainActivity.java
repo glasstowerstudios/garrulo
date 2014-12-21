@@ -1,15 +1,28 @@
-package com.glasstowerstudios.garrulo;
+package com.glasstowerstudios.garrulo.ui;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.telephony.SmsMessage;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.glasstowerstudios.garrulo.R;
+import com.glasstowerstudios.garrulo.service.GarruloListenerService;
+import com.glasstowerstudios.garrulo.tts.TTSAdapterFactory;
+
+/**
+ * Main Activity for Garrulo application.
+ *
+ * This activity also contains some test data for testing TextToSpeech (TTS) capabilities.
+ */
 public class GarruloMainActivity
-        extends Activity
-        implements TextToSpeech.OnInitListener {
+        extends Activity {
 
     private static final String LOGTAG = GarruloMainActivity.class.getSimpleName();
 
@@ -18,23 +31,22 @@ public class GarruloMainActivity
     private static final String testText3 = "He had a daughter named Nan, who ran off with a Man";
     private static final String testText4 = "And, as for the money, Nantucket!";
 
-    // TODO: At some point, we'll probably want to convert this into a service.
-    private TextToSpeech mTTSConvertorInstance;
-    private boolean mReady; // Flag indicating whether we're ready to perform TTS conversions.
+    private TTSAdapterFactory mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_garrulo_main);
-        mReady = false;
-        mTTSConvertorInstance = new TextToSpeech(this, this);
+        mAdapter = TTSAdapterFactory.getInstance();
+        mAdapter.init(this);
+        startService(new Intent(this, GarruloListenerService.class));
     }
 
     @Override
     protected void onDestroy() {
-        if (mReady && mTTSConvertorInstance != null) {
-            mTTSConvertorInstance.shutdown();
-        }
+        super.onDestroy();
+        stopService(new Intent(this, GarruloListenerService.class));
+        mAdapter.shutdown();
     }
 
     @Override
@@ -76,24 +88,15 @@ public class GarruloMainActivity
                 while(true) {
                     // Run every 20 ms.
                     long curTime = System.currentTimeMillis();
-                    if (curTime - lastSpeakTime >= 20000 && mReady) {
+                    if (curTime - lastSpeakTime >= 20000) {
                         lastSpeakTime = curTime;
-                        mTTSConvertorInstance.speak(testText1, TextToSpeech.QUEUE_ADD, null);
-                        mTTSConvertorInstance.speak(testText2, TextToSpeech.QUEUE_ADD, null);
-                        mTTSConvertorInstance.speak(testText3, TextToSpeech.QUEUE_ADD, null);
-                        mTTSConvertorInstance.speak(testText4, TextToSpeech.QUEUE_ADD, null);
+                        mAdapter.speak(testText1);
+                        mAdapter.speak(testText2);
+                        mAdapter.speak(testText3);
+                        mAdapter.speak(testText4);
                     }
                 }
             }
         }).start();
-    }
-
-    @Override
-    public void onInit(int status) {
-        if (status == TextToSpeech.ERROR) {
-            Log.d(LOGTAG, "Unable to perform text to speech conversion due to error in initialization");
-        } else {
-            mReady = true;
-        }
     }
 }

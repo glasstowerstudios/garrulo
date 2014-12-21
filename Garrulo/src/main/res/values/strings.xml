@@ -3,10 +3,14 @@
 
     <!-- General App Strings -->
     <string name="app_name">Garrulo</string>
+    <string name="service_name">Garrulo Listener Service</string>
     <string name="action_settings">Settings</string>
     <string name="action_quit">Quit</string>
 
     <!-- Main Activity Strings -->
     <string name="main_instructions">Garrulo will convert text to speech while this activity is active. Close Garrulo if you wish to turn it off.</string>
     <string name="action_test">Test</string>
+
+    <!-- Spoken Strings -->
+    <string name="new_message_from_prefix">New text message from </string>
 </resources>
