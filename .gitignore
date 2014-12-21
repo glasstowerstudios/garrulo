@@ -1,0 +1,28 @@
+# Local Configuration Files
+.gradle
+local.properties
+
+# Per-user Project Management Stuff
+*.iml
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/find.xml
+.idea/libraries
+.idea/dictionaries
+.idea/dataSources.ids
+.idea/dataSources.xml
+.idea/sqlDataSources.xml
+.idea/dynamic.xml
+.idea/uiDesigner.xml
+.idea/gradle.xml
+
+# OS/X Nonsense Files
+.DS_Store
+
+# Generated Files
+build
+
+# Crashlytics plugin (for Android Studio and IntelliJ)
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
