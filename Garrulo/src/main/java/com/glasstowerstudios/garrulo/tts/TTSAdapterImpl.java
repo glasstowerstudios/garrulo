@@ -11,8 +11,8 @@ import java.util.List;
 /**
  * Implementation of an adapter for TextToSpeech (TTS) services.
  */
-public class TTSAdapterFactoryImpl
-        extends TTSAdapterFactory
+public class TTSAdapterImpl
+        extends TTSAdapter
         implements TextToSpeech.OnInitListener {
 
     private static final String LOGTAG = TTSAdapterFactory.class.getSimpleName();

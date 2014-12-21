@@ -14,6 +14,7 @@ import android.util.Log;
 
 import com.glasstowerstudios.garrulo.R;
 import com.glasstowerstudios.garrulo.app.GarruloApplication;
+import com.glasstowerstudios.garrulo.tts.TTSAdapter;
 import com.glasstowerstudios.garrulo.tts.TTSAdapterFactory;
 
 import java.util.ArrayDeque;
@@ -33,7 +34,7 @@ public class SMSReceiver
 
     private boolean mReady = false; // Flag indicating if TTS is ready to go.
     private Deque<SmsMessage> mQueue;
-    private TTSAdapterFactory mAdapter;
+    private TTSAdapter mAdapter;
 
     public SMSReceiver() {
         super();
@@ -48,7 +49,7 @@ public class SMSReceiver
             Log.d(LOGTAG, "Received an intent for Telephony.SMS_RECEIVED");
             Bundle extras = aIntent.getExtras();
             SmsMessage messages[] = null;
-            mAdapter = TTSAdapterFactory.getInstance();
+            mAdapter = TTSAdapterFactory.getAdapter();
             if (extras != null) {
                 // A "PDU" is a "Protocol Data Unit" - the industry spec for SMS
                 Object pdus[] = (Object[]) extras.get("pdus");

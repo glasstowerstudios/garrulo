@@ -10,30 +10,27 @@ import android.util.Log;
 public abstract class TTSAdapterFactory {
     private static final String LOGTAG = TTSAdapterFactory.class.getSimpleName();
 
-    private static TTSAdapterFactory sInstance;
+    private static TTSAdapter sInstance;
 
-    public abstract void init(Context aContext);
-
-    public abstract void speak(String aWhat);
-
-    public abstract void shutdown();
-
-    public abstract void addOnInitListener(TextToSpeech.OnInitListener aListener);
-
-    public abstract void removeOnInitListener(TextToSpeech.OnInitListener aListener);
-
-    public abstract boolean isReady();
-
-    public static TTSAdapterFactory getInstance() {
+    /**
+     * Retrieve an instance of the {@link TTSAdapter}, or create one if one is not yet available.
+     *
+     * This method currently is bound to {@link TTSAdapterImpl}, but if additional implementations
+     * are created in the future, it can be refactored to take a class parameter instead.
+     *
+     * @return A static instance of {@link TTSAdapter}.
+     */
+    public static TTSAdapter getAdapter() {
         if (sInstance == null) {
-            String className =  "TTSAdapterFactoryImpl";
             try {
-                Class<? extends TTSAdapterFactory> clazz =
-                        Class.forName(TTSAdapterFactory.class.getPackage().getName() + "." + className)
-                        .asSubclass(TTSAdapterFactory.class);
+                Class<? extends TTSAdapter> clazz =
+                        Class.forName(TTSAdapterFactory.class.getPackage().getName()
+                                      + "."
+                                      + TTSAdapterImpl.class.getSimpleName())
+                        .asSubclass(TTSAdapter.class);
                 sInstance = clazz.newInstance();
             } catch (ClassNotFoundException|IllegalAccessException|InstantiationException e) {
-                Log.e(LOGTAG, "Unable to instantiate instance of class: " + className, e);
+                Log.e(LOGTAG, "Unable to instantiate instance of class: " + TTSAdapterImpl.class.getSimpleName(), e);
                 throw new IllegalArgumentException(e);
             }
         }

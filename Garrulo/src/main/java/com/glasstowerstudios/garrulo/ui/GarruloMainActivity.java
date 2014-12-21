@@ -1,19 +1,14 @@
 package com.glasstowerstudios.garrulo.ui;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
-import android.telephony.SmsMessage;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.glasstowerstudios.garrulo.R;
 import com.glasstowerstudios.garrulo.service.GarruloListenerService;
+import com.glasstowerstudios.garrulo.tts.TTSAdapter;
 import com.glasstowerstudios.garrulo.tts.TTSAdapterFactory;
 
 /**
@@ -31,13 +26,13 @@ public class GarruloMainActivity
     private static final String testText3 = "He had a daughter named Nan, who ran off with a Man";
     private static final String testText4 = "And, as for the money, Nantucket!";
 
-    private TTSAdapterFactory mAdapter;
+    private TTSAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_garrulo_main);
-        mAdapter = TTSAdapterFactory.getInstance();
+        mAdapter = TTSAdapterFactory.getAdapter();
         mAdapter.init(this);
         startService(new Intent(this, GarruloListenerService.class));
     }
