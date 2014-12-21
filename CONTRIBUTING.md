@@ -1,7 +1,7 @@
 Contributing
 ================
 
-First and foremost, thank you for your interest in contributing to Garrulo! This is a small script, so there isn't a lot of work to do. That said, patches are accepted, so this just outlines our process for contributing.
+First and foremost, thank you for your interest in contributing to Garrulo! Patches are definitely accepted, so this just outlines our process for contributing.
 
 General Development Process
 ----------------
