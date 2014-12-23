@@ -1,13 +1,15 @@
 package com.glasstowerstudios.garrulo;
 
-import android.app.Application;
 import android.test.ApplicationTestCase;
 
+import com.glasstowerstudios.garrulo.app.GarruloApplication;
+
 /**
- * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
+ * Test to verify that the {@link com.glasstowerstudios.garrulo.app.GarruloApplication} is setup
+ * correctly.
  */
-public class ApplicationTest extends ApplicationTestCase<Application> {
+public class ApplicationTest extends ApplicationTestCase<GarruloApplication> {
     public ApplicationTest() {
-        super(Application.class);
+        super(GarruloApplication.class);
     }
 }

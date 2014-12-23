@@ -16,6 +16,8 @@ import com.glasstowerstudios.garrulo.R;
 import com.glasstowerstudios.garrulo.app.GarruloApplication;
 import com.glasstowerstudios.garrulo.tts.TTSAdapter;
 import com.glasstowerstudios.garrulo.tts.TTSAdapterFactory;
+import com.glasstowerstudios.garrulo.util.Interpreter;
+import com.glasstowerstudios.garrulo.util.SMSInterpreter;
 
 import java.util.ArrayDeque;
 import java.util.Collection;
@@ -85,30 +87,11 @@ public class SMSReceiver
         }
     }
 
-    private String getContactName(String aPhoneNumber) {
-        ContentResolver cr = GarruloApplication.getInstance().getContentResolver();
-        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(aPhoneNumber));
-        Cursor cursor = cr.query(uri, new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME}, null, null, null);
-        if (cursor == null) {
-            return null;
-        }
-        String contactName = null;
-        if(cursor.moveToFirst()) {
-            contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
-        }
-
-        if(cursor != null && !cursor.isClosed()) {
-            cursor.close();
-        }
-
-        return contactName;
-    }
-
     private void speakMessage(SmsMessage aMessage) {
-        String phoneNumber = aMessage.getOriginatingAddress();
-        String messageFrom = "New message from " + getContactName(phoneNumber);
-        String messageBody = aMessage.getMessageBody();
-        mAdapter.speak(messageFrom);
-        mAdapter.speak(messageBody);
+        Interpreter<SmsMessage> interpreter = new SMSInterpreter();
+        String[] messages = interpreter.interpretMessage(aMessage);
+        for (String message : messages) {
+            mAdapter.speak(message);
+        }
     }
 }
