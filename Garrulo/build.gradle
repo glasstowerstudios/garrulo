@@ -30,4 +30,5 @@ repositories {
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
   compile 'com.googlecode.libphonenumber:libphonenumber:7.0.1'
+  compile 'com.android.support:support-v4:21.0.3'
 }

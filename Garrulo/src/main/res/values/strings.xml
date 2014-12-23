@@ -13,4 +13,16 @@
 
     <!-- Spoken Strings -->
     <string name="new_message_from_prefix">New text message from </string>
+
+    <!-- Settings Strings -->
+    <string name="title_activity_settings">Settings</string>
+    <string name="pref_header_general">General</string>
+    <string name="pref_key_nfc_onoff">garrulo.nfcenabled</string>
+    <string name="pref_title_nfc_onoff">NFC (Near-Field Communication)</string>
+    <string name="pref_summary_nfc_onoff">Turn on or off near-field communication</string>
+    <string name="pref_nfc_not_available">NFC not available on this device</string>
+    <string name="pref_nfc_settings_alert_title">NFC Disabled</string>
+    <string name="pref_nfc_settings_alert_message">NFC is currently disabled in the system settings. Would you like to navigate to the system settings to turn it on?</string>
+    <string name="pref_nfc_settings_negative">No</string>
+    <string name="pref_nfc_settings_positive">Yes</string>
 </resources>
