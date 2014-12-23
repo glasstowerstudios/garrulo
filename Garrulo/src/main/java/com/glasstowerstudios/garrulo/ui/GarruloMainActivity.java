@@ -45,6 +45,11 @@ public class GarruloMainActivity
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_garrulo_main, menu);
@@ -60,7 +65,8 @@ public class GarruloMainActivity
 
         switch (id) {
             case R.id.action_settings:
-                return true;
+                startActivity(new Intent(this, SettingsActivity.class));
+                break;
             case R.id.action_test:
                 runSpeakingTest();
                 break;
