@@ -8,7 +8,7 @@
     <string name="action_quit">Quit</string>
 
     <!-- Main Activity Strings -->
-    <string name="main_instructions">Garrulo will convert text to speech while this activity is active. Close Garrulo if you wish to turn it off.</string>
+    <string name="main_instructions">Garrulo will convert text to speech while this activity is running. Close Garrulo if you wish to turn it off.</string>
     <string name="action_test">Start Test</string>
     <string name="action_stop_test">Stop Test</string>
 
