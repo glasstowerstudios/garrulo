@@ -91,6 +91,7 @@ public class SMSReceiver
         Interpreter<SmsMessage> interpreter = new SMSInterpreter();
         String[] messages = interpreter.interpretMessage(aMessage);
         for (String message : messages) {
+            Log.d(LOGTAG, "Speaking message: " + message);
             mAdapter.speak(message);
         }
     }

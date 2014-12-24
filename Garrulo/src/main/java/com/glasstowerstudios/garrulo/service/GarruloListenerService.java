@@ -37,6 +37,7 @@ public class GarruloListenerService extends Service {
 
     @Override
     public void onDestroy() {
+        Log.d(LOGTAG, "Garrulo listener service destroyed");
         unregisterReceiver(mReceiver);
     }
 

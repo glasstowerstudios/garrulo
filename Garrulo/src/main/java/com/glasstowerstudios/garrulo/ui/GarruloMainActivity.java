@@ -3,6 +3,7 @@ package com.glasstowerstudios.garrulo.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -26,11 +27,17 @@ public class GarruloMainActivity
     private static final String testText3 = "He had a daughter named Nan, who ran off with a Man";
     private static final String testText4 = "And, as for the money, Nantucket!";
 
+    private MenuItem mTestMenuItem;
+    private MenuItem mStopTestMenuItem;
+
+    private boolean mShouldStop = false;
+
     private TTSAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(LOGTAG, "Creating Garrulo main activity");
         setContentView(R.layout.activity_garrulo_main);
         mAdapter = TTSAdapterFactory.getAdapter();
         mAdapter.init(this);
@@ -40,6 +47,7 @@ public class GarruloMainActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.d(LOGTAG, "Destroying Garrulo main activity");
         stopService(new Intent(this, GarruloListenerService.class));
         mAdapter.shutdown();
     }
@@ -53,6 +61,9 @@ public class GarruloMainActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_garrulo_main, menu);
+        mTestMenuItem = menu.findItem(R.id.action_test);
+        mStopTestMenuItem = menu.findItem(R.id.action_stop_test);
+        mStopTestMenuItem.setEnabled(false);
         return true;
     }
 
@@ -70,6 +81,9 @@ public class GarruloMainActivity
             case R.id.action_test:
                 runSpeakingTest();
                 break;
+            case R.id.action_stop_test:
+                disableSpeakingTest();
+                break;
             case R.id.action_quit:
                 GarruloMainActivity.this.finish();
                 android.os.Process.killProcess(android.os.Process.myPid());
@@ -81,12 +95,15 @@ public class GarruloMainActivity
     }
 
     private void runSpeakingTest() {
+        mTestMenuItem.setEnabled(false);
+        mStopTestMenuItem.setEnabled(true);
+        mShouldStop = false;
         new Thread(new Runnable() {
 
             @Override
             public void run() {
                 long lastSpeakTime = 0;
-                while(true) {
+                while(!mShouldStop) {
                     // Run every 20 ms.
                     long curTime = System.currentTimeMillis();
                     if (curTime - lastSpeakTime >= 20000) {
@@ -99,5 +116,11 @@ public class GarruloMainActivity
                 }
             }
         }).start();
+    }
+
+    private void disableSpeakingTest() {
+        mShouldStop = true;
+        mTestMenuItem.setEnabled(true);
+        mStopTestMenuItem.setEnabled(false);
     }
 }
