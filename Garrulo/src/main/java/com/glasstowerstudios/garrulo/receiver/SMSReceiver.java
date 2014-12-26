@@ -1,10 +1,12 @@
 package com.glasstowerstudios.garrulo.receiver;
 
+import android.app.Notification;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -64,6 +66,9 @@ public class SMSReceiver
                         Log.d(LOGTAG, "Added message: " + messages[i] + " to queue");
                     } else {
                         Log.d(LOGTAG, "Speaking message " + messages[i]);
+
+                        // Instead of doing this, what we might want to do is create a
+                        // producer/consumer model in a separate thread that consumes mQueue.
                         speakMessage(messages[i]);
                     }
                 }
