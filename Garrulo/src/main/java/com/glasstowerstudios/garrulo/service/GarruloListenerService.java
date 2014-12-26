@@ -32,7 +32,9 @@ public class GarruloListenerService extends Service {
         Log.d(LOGTAG, "Garrulo listener service created");
         mReceiver = new SMSReceiver();
 
-        registerReceiver(mReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
+        IntentFilter smsFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
+        smsFilter.setPriority(1000); // Make sure hangouts doesn't swallow our intents.
+        registerReceiver(mReceiver, smsFilter);
     }
 
     @Override
