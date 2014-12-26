@@ -26,4 +26,7 @@
     <string name="pref_nfc_settings_alert_message">NFC is currently disabled in the system settings. Would you like to navigate to the system settings to turn it on?</string>
     <string name="pref_nfc_settings_negative">No</string>
     <string name="pref_nfc_settings_positive">Yes</string>
+    <string name="pref_key_suppress_notification_sound">garrulo.notifications.sounds.suppress</string>
+    <string name="pref_title_suppress_notification_sound">Suppress Notification Sound</string>
+    <string name="pref_summary_suppress_notification_sound">Turn on or off whether Garrulo should suppress the default notification sound on messages it reads</string>
 </resources>

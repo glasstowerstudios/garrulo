@@ -1,13 +1,18 @@
 package com.glasstowerstudios.garrulo.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.glasstowerstudios.garrulo.R;
+import com.glasstowerstudios.garrulo.app.GarruloApplication;
+import com.glasstowerstudios.garrulo.pref.GarruloPreferences;
 import com.glasstowerstudios.garrulo.service.GarruloListenerService;
 import com.glasstowerstudios.garrulo.tts.TTSAdapter;
 import com.glasstowerstudios.garrulo.tts.TTSAdapterFactory;
@@ -42,6 +47,10 @@ public class GarruloMainActivity
         mAdapter = TTSAdapterFactory.getAdapter();
         mAdapter.init(this);
         startService(new Intent(this, GarruloListenerService.class));
+
+        if (GarruloPreferences.getPreferences().isSuppressDefaultNotificationSound()) {
+            GarruloApplication.getInstance().suppressNotifications();
+        }
     }
 
     @Override
@@ -50,6 +59,8 @@ public class GarruloMainActivity
         Log.d(LOGTAG, "Destroying Garrulo main activity");
         stopService(new Intent(this, GarruloListenerService.class));
         mAdapter.shutdown();
+
+        GarruloApplication.getInstance().unsuppressNotifications();
     }
 
     @Override

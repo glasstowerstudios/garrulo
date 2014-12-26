@@ -1,6 +1,8 @@
 package com.glasstowerstudios.garrulo.app;
 
 import android.app.Application;
+import android.content.Context;
+import android.media.AudioManager;
 import android.util.Log;
 
 /**
@@ -9,6 +11,8 @@ import android.util.Log;
  */
 public class GarruloApplication extends Application {
     private static final String LOGTAG = GarruloApplication.class.getSimpleName();
+
+    private boolean mAreNotificationsSuppressed = false;
 
     private static GarruloApplication sInstance;
 
@@ -24,4 +28,30 @@ public class GarruloApplication extends Application {
 
         return sInstance;
     }
+
+    /**
+     * Suppress notifications from playing the default notification ringtone when Garrulo is
+     * active.
+     */
+    public void suppressNotifications() {
+        if (!mAreNotificationsSuppressed) {
+            Log.d(LOGTAG, "Muting notification stream");
+            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            audioManager.setStreamMute(AudioManager.STREAM_NOTIFICATION, true);
+            mAreNotificationsSuppressed = true;
+        }
+    }
+
+    /**
+     * Turn off suppression of notifications.
+     */
+    public void unsuppressNotifications() {
+        if (mAreNotificationsSuppressed) {
+            Log.d(LOGTAG, "Unmuting notification stream");
+            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            audioManager.setStreamMute(AudioManager.STREAM_NOTIFICATION, false);
+            mAreNotificationsSuppressed = false;
+        }
+    }
+
 }

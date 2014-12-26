@@ -1,9 +1,14 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <SwitchPreference
         android:key="@string/pref_key_nfc_onoff"
         android:title="@string/pref_title_nfc_onoff"
         android:summary="@string/pref_summary_nfc_onoff"
+        android:defaultValue="false" />
+    <SwitchPreference
+        android:key="@string/pref_key_suppress_notification_sound"
+        android:title="@string/pref_title_suppress_notification_sound"
+        android:summary="@string/pref_summary_suppress_notification_sound"
         android:defaultValue="false" />
     <!--<CheckBoxPreference-->
         <!--android:key="example_checkbox"-->

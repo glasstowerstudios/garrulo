@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.glasstowerstudios.garrulo.R;
 import com.glasstowerstudios.garrulo.app.GarruloApplication;
+import com.glasstowerstudios.garrulo.pref.GarruloPreferences;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -48,8 +49,9 @@ public class SettingsActivity extends PreferenceActivity {
 
                 @Override
                 public boolean onPreferenceChange(Preference aPref, Object aNewValue) {
-                    if (aPref instanceof SwitchPreference) {
-                        Boolean value = (Boolean)aNewValue;
+                    String key = aPref.getKey();
+                    if (key.equals(getResources().getString(R.string.pref_key_nfc_onoff))) {
+                        Boolean value = (Boolean) aNewValue;
 
                         // If we're enabling NFC, then let's check to make sure it can be enabled.
                         if (value.booleanValue()) {
@@ -84,6 +86,17 @@ public class SettingsActivity extends PreferenceActivity {
                                         dialog.show();
                                     }
                                 }
+                            }
+                        }
+                    } else if (key.equals(getResources().getString(R.string.pref_key_suppress_notification_sound))) {
+                        SwitchPreference suppressPref = (SwitchPreference) aPref;
+                        GarruloPreferences allPrefs = GarruloPreferences.getPreferences();
+                        if (suppressPref.isChecked() != allPrefs.isSuppressDefaultNotificationSound()) {
+                            GarruloApplication app = GarruloApplication.getInstance();
+                            if (suppressPref.isChecked()) {
+                                app.suppressNotifications();
+                            } else {
+                                app.unsuppressNotifications();
                             }
                         }
                     }
