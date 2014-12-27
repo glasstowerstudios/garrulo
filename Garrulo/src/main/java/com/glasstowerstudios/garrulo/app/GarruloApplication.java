@@ -3,6 +3,8 @@ package com.glasstowerstudios.garrulo.app;
 import android.app.Application;
 import android.content.Context;
 import android.media.AudioManager;
+import android.nfc.NfcAdapter;
+import android.nfc.NfcManager;
 import android.util.Log;
 
 /**
@@ -54,4 +56,32 @@ public class GarruloApplication extends Application {
         }
     }
 
+    /**
+     * Determines if the hardware on this device allows for near-field communication.
+     *
+     * @return true, if this device supports NFC; false, otherwise.
+     */
+    public static boolean isNFCAvailable() {
+        Context appContext = GarruloApplication.getInstance();
+        final NfcManager manager = (NfcManager) appContext.getSystemService(Context.NFC_SERVICE);
+        NfcAdapter adapter = manager.getDefaultAdapter();
+        return !(adapter == null);
+    }
+
+    /**
+     * Determines if this device supports near-field communication, and if so, if near-field
+     * communication is enabled.
+     *
+     * @return true, if this device supports NFC and NFC is enabled; false, otherwise.
+     */
+    public static boolean isNFCEnabled() {
+        if (!isNFCAvailable()) {
+            return false;
+        }
+
+        Context appContext = GarruloApplication.getInstance();
+        final NfcManager manager = (NfcManager) appContext.getSystemService(Context.NFC_SERVICE);
+        NfcAdapter adapter = manager.getDefaultAdapter();
+        return adapter.isEnabled();
+    }
 }

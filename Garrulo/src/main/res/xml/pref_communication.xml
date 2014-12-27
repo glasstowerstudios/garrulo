@@ -1,0 +1,8 @@
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <SwitchPreference
+    android:key="@string/pref_key_nfc_onoff"
+    android:title="@string/pref_title_nfc_onoff"
+    android:summary="@string/pref_summary_nfc_onoff"
+    android:defaultValue="false" />
+</PreferenceScreen>
