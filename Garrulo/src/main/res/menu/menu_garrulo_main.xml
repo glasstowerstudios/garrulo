@@ -2,10 +2,16 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".GarruloMainActivity">
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" android:showAsAction="never" />
+    <item android:id="@+id/action_start_notification_listener" android:title="@string/action_start_notification_listening"
+        android:orderInCategory="101" android:showAsAction="never" />
+    <item android:id="@+id/action_stop_notification_listener" android:title="@string/action_stop_notification_listening"
+        android:orderInCategory="102" android:showAsAction="never" android:enabled="false"/>
+    <item android:id="@+id/action_notify" android:title="@string/action_notify"
+        android:orderInCategory="103" android:showAsAction="never" />
     <item android:id="@+id/action_test" android:title="@string/action_test"
-        android:orderInCategory="150" android:showAsAction="never" />
+        android:orderInCategory="104" android:showAsAction="never" />
     <item android:id="@+id/action_stop_test" android:title="@string/action_stop_test"
-        android:orderInCategory="175" android:showAsAction="never" />
+        android:orderInCategory="105" android:showAsAction="never" android:enabled="false" />
     <item android:id="@+id/action_quit" android:title="@string/action_quit"
-        android:orderInCategory="200" android:showAsAction="never" />
+        android:orderInCategory="106" android:showAsAction="never" />
 </menu>

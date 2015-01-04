@@ -24,7 +24,7 @@ public class GarruloListenerService extends Service {
         super.onStartCommand(aIntent, aFlags, aStartId);
 
         Log.d(LOGTAG, "Garrulo Listener Service started");
-        return Service.START_NOT_STICKY;
+        return Service.START_STICKY;
     }
 
     @Override

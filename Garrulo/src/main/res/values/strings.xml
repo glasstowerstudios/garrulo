@@ -8,9 +8,16 @@
     <string name="action_quit">Quit</string>
 
     <!-- Main Activity Strings -->
-    <string name="main_instructions">Garrulo will convert text to speech while this activity is running. Close Garrulo if you wish to turn it off.</string>
+    <string name="main_instructions">Garrulo will read notifications while running. To stop Garrulo, select "Stop Reading" from the menu in the action bar.</string>
+    <string name="action_notify">Notify</string>
+    <string name="action_start_notification_listening">Start Notification Listener</string>
+    <string name="action_stop_notification_listening">Stop Notification Listener</string>
     <string name="action_test">Start Test</string>
     <string name="action_stop_test">Stop Test</string>
+    <string name="notification_listener_access_title">Notification Access Needed</string>
+    <string name="notification_listener_access_warning">Notification Listener access has not been granted to Garrulo. In order for the application to work properly, the Garrulo Listener Service needs to have access to notifications. Would you like to be directed to the Android Settings application to change this?</string>
+    <string name="notification_listener_response_negative">No</string>
+    <string name="notification_listener_response_positive">Yes</string>
 
     <!-- Spoken Strings -->
     <string name="new_message_from_prefix">New text message from </string>
@@ -28,8 +35,11 @@
     <string name="pref_nfc_settings_negative">No</string>
     <string name="pref_nfc_settings_positive">Yes</string>
     <string name="pref_key_suppress_notification_sound">garrulo.notifications.sounds.suppress</string>
-    <string name="pref_title_suppress_notification_sound">Suppress Notification Sound</string>
-    <string name="pref_summary_suppress_notification_sound">Turn on or off whether Garrulo should suppress the default notification sound on messages it reads</string>
-    <string name="pref_header_general_summary">General preferences related Garrulo</string>
+    <string name="pref_title_suppress_notification_sound">Suppress Default Notification</string>
+    <string name="pref_summary_suppress_notification_sound">Turn on or off whether Garrulo should suppress the default notification when it handles a notification</string>
+    <string name="pref_header_general_summary">General preferences related to Garrulo</string>
     <string name="pref_header_communication_summary">Preferences related to how Garrulo communicates with the outside world</string>
+
+    <!-- Communicator Strings -->
+    <string name="communicator_intent">com.glasstowerstudios.garrulo.LISTENER_COMMUNICATION</string>
 </resources>
