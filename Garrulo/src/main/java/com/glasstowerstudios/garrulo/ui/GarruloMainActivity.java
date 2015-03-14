@@ -3,7 +3,6 @@ package com.glasstowerstudios.garrulo.ui;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -47,7 +46,6 @@ public class GarruloMainActivity
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    Log.d(LOGTAG, "***** DEBUG_jwir3: Creating Garrulo main activity");
     setContentView(R.layout.activity_garrulo_main);
     mAdapter = TTSAdapterFactory.getAdapter();
     mAdapter.init(this);
@@ -61,7 +59,6 @@ public class GarruloMainActivity
   @Override
   protected void onDestroy() {
     super.onDestroy();
-    Log.d(LOGTAG, "Destroying Garrulo main activity");
     stopService(new Intent(this, GarruloListenerService.class));
     mAdapter.shutdown();
 
@@ -112,7 +109,7 @@ public class GarruloMainActivity
         ncomp.setContentTitle("My Notification");
         ncomp.setContentText("Notification Listener Service Example");
         ncomp.setTicker("Notification Listener Service Example");
-        ncomp.setCategory(Notification.CATEGORY_EVENT);
+        ncomp.setCategory(NotificationCompat.CATEGORY_EVENT);
         ncomp.setSmallIcon(R.drawable.ic_launcher);
         ncomp.setAutoCancel(true);
         nManager.notify((int)System.currentTimeMillis(),ncomp.build());
