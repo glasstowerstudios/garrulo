@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.glasstowerstudios.garrulo" >
+    package="com.glasstowerstudios.garrulo">
 
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -11,10 +11,10 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/GarruloMainTheme" >
+        android:theme="@style/GarruloMainTheme">
         <activity
             android:name="com.glasstowerstudios.garrulo.ui.GarruloMainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,8 +25,7 @@
         <service
             android:name="com.glasstowerstudios.garrulo.service.GarruloListenerService"
             android:label="@string/service_name"
-            android:permission="android.permission.RECEIVE_SMS">
-        </service>
+            android:permission="android.permission.RECEIVE_SMS"></service>
 
         <service
             android:name=".service.GeneralNotificationListenerService"
@@ -40,7 +39,7 @@
         <activity
             android:name="com.glasstowerstudios.garrulo.ui.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="com.glasstowerstudios.garrulo.ui.GarruloMainActivity" >
+            android:parentActivityName="com.glasstowerstudios.garrulo.ui.GarruloMainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.glasstowerstudios.garrulo.ui.GarruloMainActivity" />

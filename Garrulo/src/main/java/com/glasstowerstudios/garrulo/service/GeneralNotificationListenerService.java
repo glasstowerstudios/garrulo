@@ -1,19 +1,17 @@
 package com.glasstowerstudios.garrulo.service;
 
 import android.annotation.TargetApi;
-import android.app.Notification;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
-import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.glasstowerstudios.garrulo.R;
-import com.glasstowerstudios.garrulo.comm.GarruloMessage;
 import com.glasstowerstudios.garrulo.comm.GarruloMessageHandler;
 import com.glasstowerstudios.garrulo.comm.SMSMessageHandler;
 
@@ -56,11 +54,16 @@ public class GeneralNotificationListenerService extends NotificationListenerServ
   public void onNotificationPosted(StatusBarNotification sbn) {
     // Dispatch to the appropriate handler
     if (mShouldListen) {
-      Log.i(LOGTAG,"***** DEBUG_jwir3: onNotificationPosted: " + sbn);
-      Log.i(LOGTAG,"***** DEBUG_jwir3: ID: " + sbn.getId() + " +++ " + sbn.getNotification().tickerText + " +++ " + sbn.getPackageName());
+      Log.i(LOGTAG, "***** DEBUG_jwir3: onNotificationPosted: " + sbn);
+      Log.i(LOGTAG, "***** DEBUG_jwir3: ID: "
+                    + sbn.getId()
+                    + " +++ "
+                    + sbn.getNotification().tickerText
+                    + " +++ "
+                    + sbn.getPackageName());
 
-      switch (sbn.getNotification().category) {
-        case Notification.CATEGORY_MESSAGE:
+      switch (NotificationCompat.getCategory(sbn.getNotification())) {
+        case NotificationCompat.CATEGORY_MESSAGE:
           // We don't want to do anything with this category, because it will be handled by the
           // listener of SMS_RECEIVED.
           break;
@@ -70,10 +73,16 @@ public class GeneralNotificationListenerService extends NotificationListenerServ
 
   @Override
   public void onNotificationRemoved(StatusBarNotification sbn) {
-    Log.i(LOGTAG,"***** DEBUG_jwir3: onNotificationRemoved: " + sbn);
-    Log.i(LOGTAG,"***** DEBUG_jwir3: ID:" + sbn.getId() + " +++ " + sbn.getNotification().tickerText + " +++ " + sbn.getPackageName());
+    Log.i(LOGTAG, "***** DEBUG_jwir3: onNotificationRemoved: " + sbn);
+    Log.i(LOGTAG, "***** DEBUG_jwir3: ID:"
+                  + sbn.getId()
+                  + " +++ "
+                  + sbn.getNotification().tickerText
+                  + " +++ "
+                  + sbn.getPackageName());
   }
 
+  @TargetApi(21)
   public void cancelNotification(StatusBarNotification aStatusBarNotification) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       cancelNotification(aStatusBarNotification.getKey());

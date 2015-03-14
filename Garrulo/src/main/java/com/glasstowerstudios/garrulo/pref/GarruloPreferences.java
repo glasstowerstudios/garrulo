@@ -4,9 +4,8 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
 
-import com.glasstowerstudios.garrulo.app.GarruloApplication;
-
 import com.glasstowerstudios.garrulo.R;
+import com.glasstowerstudios.garrulo.app.GarruloApplication;
 
 /**
  * Encapsulation of preferences specific to Garrulo.
@@ -16,26 +15,48 @@ import com.glasstowerstudios.garrulo.R;
  * instance of this object.
  */
 public class GarruloPreferences {
-    private boolean mNFCEnabled;
-    private boolean mSuppressDefaultNotificationSound;
+  private static volatile GarruloPreferences sInstance;
 
-    private GarruloPreferences() {
-        GarruloApplication app = GarruloApplication.getInstance();
-        Resources res = app.getResources();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(app);
-        mNFCEnabled = prefs.getBoolean(res.getString(R.string.pref_key_nfc_onoff), false);
-        mSuppressDefaultNotificationSound = prefs.getBoolean(res.getString(R.string.pref_key_suppress_notification_sound), false);
+  private GarruloPreferences() {
+  }
+
+  public boolean isNFCEnabled() {
+    GarruloApplication app = GarruloApplication.getInstance();
+    Resources res = app.getResources();
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(app);
+
+    return prefs.getBoolean(res.getString(R.string.pref_key_nfc_onoff), false);
+  }
+
+  public boolean shouldSuppressDefaultNotificationSound() {
+    GarruloApplication app = GarruloApplication.getInstance();
+    Resources res = app.getResources();
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(app);
+
+    return prefs.getBoolean(res.getString(R.string.pref_key_suppress_notification_sound), false);
+  }
+
+  public boolean shouldAllowDucking() {
+    GarruloApplication app = GarruloApplication.getInstance();
+    Resources res = app.getResources();
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(app);
+
+    return prefs.getBoolean(res.getString(R.string.pref_key_allow_ducking), false);
+  }
+
+  public static GarruloPreferences getPreferences() {
+    // This variable seems useless, but is actually necessary for the double-checked locking to
+    // work correctly.
+    GarruloPreferences prefs = sInstance;
+    if (prefs == null) {
+      synchronized(GarruloPreferences.class) {
+        prefs = sInstance;
+        if (prefs == null) {
+          prefs = sInstance = new GarruloPreferences();
+        }
+      }
     }
 
-    public boolean isNFCEnabled() {
-        return mNFCEnabled;
-    }
-
-    public boolean isSuppressDefaultNotificationSound() {
-        return mSuppressDefaultNotificationSound;
-    }
-
-    public static GarruloPreferences getPreferences() {
-        return new GarruloPreferences();
-    }
+    return prefs;
+  }
 }

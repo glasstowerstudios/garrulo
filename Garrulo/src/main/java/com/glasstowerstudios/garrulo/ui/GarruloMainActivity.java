@@ -3,7 +3,6 @@ package com.glasstowerstudios.garrulo.ui;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -47,21 +46,19 @@ public class GarruloMainActivity
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    Log.d(LOGTAG, "***** DEBUG_jwir3: Creating Garrulo main activity");
     setContentView(R.layout.activity_garrulo_main);
     mAdapter = TTSAdapterFactory.getAdapter();
     mAdapter.init(this);
     startService(new Intent(this, GarruloListenerService.class));
 
-    if (GarruloPreferences.getPreferences().isSuppressDefaultNotificationSound()) {
-        GarruloApplication.getInstance().suppressNotifications();
+    if (GarruloPreferences.getPreferences().shouldSuppressDefaultNotificationSound()) {
+      GarruloApplication.getInstance().suppressNotifications();
     }
   }
 
   @Override
   protected void onDestroy() {
     super.onDestroy();
-    Log.d(LOGTAG, "Destroying Garrulo main activity");
     stopService(new Intent(this, GarruloListenerService.class));
     mAdapter.shutdown();
 
@@ -112,10 +109,10 @@ public class GarruloMainActivity
         ncomp.setContentTitle("My Notification");
         ncomp.setContentText("Notification Listener Service Example");
         ncomp.setTicker("Notification Listener Service Example");
-        ncomp.setCategory(Notification.CATEGORY_EVENT);
+        ncomp.setCategory(NotificationCompat.CATEGORY_EVENT);
         ncomp.setSmallIcon(R.drawable.ic_launcher);
         ncomp.setAutoCancel(true);
-        nManager.notify((int)System.currentTimeMillis(),ncomp.build());
+        nManager.notify((int) System.currentTimeMillis(), ncomp.build());
         break;
       case R.id.action_test:
         runSpeakingTest();
@@ -167,7 +164,7 @@ public class GarruloMainActivity
       DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface aDialog, int aWhich) {
-          switch(aWhich) {
+          switch (aWhich) {
             case Dialog.BUTTON_NEGATIVE:
               aDialog.dismiss();
               break;
@@ -183,7 +180,8 @@ public class GarruloMainActivity
 
       AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
       dialogBuilder.setTitle(getResources().getString(R.string.notification_listener_access_title));
-      dialogBuilder.setMessage(getResources().getString(R.string.notification_listener_access_warning));
+      dialogBuilder
+        .setMessage(getResources().getString(R.string.notification_listener_access_warning));
       dialogBuilder.setNegativeButton(R.string.notification_listener_response_negative, listener);
       dialogBuilder.setPositiveButton(R.string.notification_listener_response_positive, listener);
       AlertDialog dialog = dialogBuilder.create();
@@ -201,7 +199,7 @@ public class GarruloMainActivity
       @Override
       public void run() {
         long lastSpeakTime = 0;
-        while(!mShouldStop) {
+        while (!mShouldStop) {
           // Run every 20 ms.
           long curTime = System.currentTimeMillis();
           if (curTime - lastSpeakTime >= 20000) {

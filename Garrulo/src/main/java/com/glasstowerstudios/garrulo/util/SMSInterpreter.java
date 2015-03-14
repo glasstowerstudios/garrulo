@@ -54,7 +54,8 @@ public class SMSInterpreter implements Interpreter {
   public String getSpeakableForm(String aPhoneNumber) {
     String speakableForm = aPhoneNumber;
     PhoneNumberUtil util = PhoneNumberUtil.getInstance();
-    TelephonyManager tMgr = (TelephonyManager)GarruloApplication.getInstance().getSystemService(Context.TELEPHONY_SERVICE);
+    TelephonyManager tMgr = (TelephonyManager) GarruloApplication.getInstance().getSystemService(
+      Context.TELEPHONY_SERVICE);
     String myPhoneNumber = tMgr.getLine1Number();
     try {
       Phonenumber.PhoneNumber myNum = util.parse(myPhoneNumber, Locale.getDefault().getCountry());
@@ -74,33 +75,36 @@ public class SMSInterpreter implements Interpreter {
   }
 
   /**
-   * Retrieve a contact's name from the Contacts content provider, using a specific
-   * {@link ContentResolver}.
+   * Retrieve a contact's name from the Contacts content provider, using a specific {@link
+   * ContentResolver}.
    *
    * This can be used to specify which content resolver you wish to utilize for determining a
    * contact's name (e.g. if you wanted to test it using a mock).
    *
    * @param aPhoneNumber The phone number for which the name should be retrieved.
-   * @param aResolver The {@link ContentResolver} to use to retrieve the data specified. If set
-   *                  to null, then the default content resolver will be used.
+   * @param aResolver    The {@link ContentResolver} to use to retrieve the data specified. If set
+   *                     to null, then the default content resolver will be used.
    *
    * @return The name of the contact corresponding to the given number, if it exists; null,
-   *         otherwise.
+   * otherwise.
    */
   public String getContactName(String aPhoneNumber, ContentResolver aResolver) {
     if (aResolver == null) {
       aResolver = GarruloApplication.getInstance().getContentResolver();
     }
 
-    Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(aPhoneNumber));
-    Cursor cursor = aResolver.query(uri, new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME}, null, null, null);
+    Uri uri = Uri
+      .withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(aPhoneNumber));
+    Cursor cursor = aResolver
+      .query(uri, new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME}, null, null, null);
     if (cursor == null) {
       return null;
     }
 
     String contactName = null;
     if (cursor.moveToFirst()) {
-      contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
+      contactName =
+        cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
     }
 
     if (cursor != null && !cursor.isClosed()) {
@@ -111,13 +115,13 @@ public class SMSInterpreter implements Interpreter {
   }
 
   /**
-   * Retrieve the name associated with a phone number, or the phone number, in speakable form,
-   * if no contact is associated with that number.
+   * Retrieve the name associated with a phone number, or the phone number, in speakable form, if no
+   * contact is associated with that number.
    *
    * @param aPhoneNumber A phone number, as a string, with or without country code.
    *
    * @return A string containing the contact's name, if a contact is associated with the phone
-   *         number given; a formatted form of the phone number idealized for speaking, otherwise.
+   * number given; a formatted form of the phone number idealized for speaking, otherwise.
    */
   public String getContactNameOrNumber(String aPhoneNumber) {
     ContentResolver cr = GarruloApplication.getInstance().getContentResolver();

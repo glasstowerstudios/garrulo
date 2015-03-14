@@ -4,4 +4,9 @@
         android:title="@string/pref_title_suppress_notification_sound"
         android:summary="@string/pref_summary_suppress_notification_sound"
         android:defaultValue="false" />
+    <SwitchPreference
+        android:key="@string/pref_key_allow_ducking"
+        android:title="@string/pref_title_allow_ducking"
+        android:summary="@string/pref_summary_allow_ducking"
+        android:defaultValue="false" />
 </PreferenceScreen>
