@@ -39,6 +39,9 @@
     <string name="pref_summary_suppress_notification_sound">Turn on or off whether Garrulo should suppress the default notification when it handles a notification</string>
     <string name="pref_header_general_summary">General preferences related to Garrulo</string>
     <string name="pref_header_communication_summary">Preferences related to how Garrulo communicates with the outside world</string>
+    <string name="pref_key_allow_ducking">garrulo.notifications.sounds.allowDucking</string>
+    <string name="pref_title_allow_ducking">Allow Volume Ducking</string>
+    <string name="pref_summary_allow_ducking">Turn on or off whether other apps that use audio should be allowed to continue playing if Garrulo needs to speak if they lower their volume (i.e. allow other apps to \"duck\").</string>
 
     <!-- Communicator Strings -->
     <string name="communicator_intent">com.glasstowerstudios.garrulo.LISTENER_COMMUNICATION</string>

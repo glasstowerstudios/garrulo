@@ -51,7 +51,7 @@ public class GarruloMainActivity
     mAdapter.init(this);
     startService(new Intent(this, GarruloListenerService.class));
 
-    if (GarruloPreferences.getPreferences().isSuppressDefaultNotificationSound()) {
+    if (GarruloPreferences.getPreferences().shouldSuppressDefaultNotificationSound()) {
       GarruloApplication.getInstance().suppressNotifications();
     }
   }
