@@ -15,36 +15,36 @@ import com.glasstowerstudios.garrulo.receiver.SMSReceiver;
  */
 public class GarruloListenerService extends Service {
 
-    private static final String LOGTAG = GarruloListenerService.class.getSimpleName();
+  private static final String LOGTAG = GarruloListenerService.class.getSimpleName();
 
-    private BroadcastReceiver mReceiver;
+  private BroadcastReceiver mReceiver;
 
-    @Override
-    public int onStartCommand(Intent aIntent, int aFlags, int aStartId) {
-        super.onStartCommand(aIntent, aFlags, aStartId);
+  @Override
+  public int onStartCommand(Intent aIntent, int aFlags, int aStartId) {
+    super.onStartCommand(aIntent, aFlags, aStartId);
 
-        Log.d(LOGTAG, "Garrulo Listener Service started");
-        return Service.START_STICKY;
-    }
+    Log.d(LOGTAG, "Garrulo Listener Service started");
+    return Service.START_STICKY;
+  }
 
-    @Override
-    public void onCreate() {
-        Log.d(LOGTAG, "Garrulo listener service created");
-        mReceiver = new SMSReceiver();
+  @Override
+  public void onCreate() {
+    Log.d(LOGTAG, "Garrulo listener service created");
+    mReceiver = new SMSReceiver();
 
-        IntentFilter smsFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
-        smsFilter.setPriority(1000); // Make sure hangouts doesn't swallow our intents.
-        registerReceiver(mReceiver, smsFilter);
-    }
+    IntentFilter smsFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
+    smsFilter.setPriority(1000); // Make sure hangouts doesn't swallow our intents.
+    registerReceiver(mReceiver, smsFilter);
+  }
 
-    @Override
-    public void onDestroy() {
-        Log.d(LOGTAG, "Garrulo listener service destroyed");
-        unregisterReceiver(mReceiver);
-    }
+  @Override
+  public void onDestroy() {
+    Log.d(LOGTAG, "Garrulo listener service destroyed");
+    unregisterReceiver(mReceiver);
+  }
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
+  @Override
+  public IBinder onBind(Intent intent) {
+    return null;
+  }
 }

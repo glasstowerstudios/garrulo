@@ -52,7 +52,7 @@ public class GarruloMainActivity
     startService(new Intent(this, GarruloListenerService.class));
 
     if (GarruloPreferences.getPreferences().isSuppressDefaultNotificationSound()) {
-        GarruloApplication.getInstance().suppressNotifications();
+      GarruloApplication.getInstance().suppressNotifications();
     }
   }
 
@@ -112,7 +112,7 @@ public class GarruloMainActivity
         ncomp.setCategory(NotificationCompat.CATEGORY_EVENT);
         ncomp.setSmallIcon(R.drawable.ic_launcher);
         ncomp.setAutoCancel(true);
-        nManager.notify((int)System.currentTimeMillis(),ncomp.build());
+        nManager.notify((int) System.currentTimeMillis(), ncomp.build());
         break;
       case R.id.action_test:
         runSpeakingTest();
@@ -164,7 +164,7 @@ public class GarruloMainActivity
       DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface aDialog, int aWhich) {
-          switch(aWhich) {
+          switch (aWhich) {
             case Dialog.BUTTON_NEGATIVE:
               aDialog.dismiss();
               break;
@@ -180,7 +180,8 @@ public class GarruloMainActivity
 
       AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
       dialogBuilder.setTitle(getResources().getString(R.string.notification_listener_access_title));
-      dialogBuilder.setMessage(getResources().getString(R.string.notification_listener_access_warning));
+      dialogBuilder
+        .setMessage(getResources().getString(R.string.notification_listener_access_warning));
       dialogBuilder.setNegativeButton(R.string.notification_listener_response_negative, listener);
       dialogBuilder.setPositiveButton(R.string.notification_listener_response_positive, listener);
       AlertDialog dialog = dialogBuilder.create();
@@ -198,7 +199,7 @@ public class GarruloMainActivity
       @Override
       public void run() {
         long lastSpeakTime = 0;
-        while(!mShouldStop) {
+        while (!mShouldStop) {
           // Run every 20 ms.
           long curTime = System.currentTimeMillis();
           if (curTime - lastSpeakTime >= 20000) {

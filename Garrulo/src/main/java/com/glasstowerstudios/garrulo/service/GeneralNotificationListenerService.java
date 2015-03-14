@@ -54,8 +54,13 @@ public class GeneralNotificationListenerService extends NotificationListenerServ
   public void onNotificationPosted(StatusBarNotification sbn) {
     // Dispatch to the appropriate handler
     if (mShouldListen) {
-      Log.i(LOGTAG,"***** DEBUG_jwir3: onNotificationPosted: " + sbn);
-      Log.i(LOGTAG,"***** DEBUG_jwir3: ID: " + sbn.getId() + " +++ " + sbn.getNotification().tickerText + " +++ " + sbn.getPackageName());
+      Log.i(LOGTAG, "***** DEBUG_jwir3: onNotificationPosted: " + sbn);
+      Log.i(LOGTAG, "***** DEBUG_jwir3: ID: "
+                    + sbn.getId()
+                    + " +++ "
+                    + sbn.getNotification().tickerText
+                    + " +++ "
+                    + sbn.getPackageName());
 
       switch (NotificationCompat.getCategory(sbn.getNotification())) {
         case NotificationCompat.CATEGORY_MESSAGE:
@@ -68,8 +73,13 @@ public class GeneralNotificationListenerService extends NotificationListenerServ
 
   @Override
   public void onNotificationRemoved(StatusBarNotification sbn) {
-    Log.i(LOGTAG,"***** DEBUG_jwir3: onNotificationRemoved: " + sbn);
-    Log.i(LOGTAG,"***** DEBUG_jwir3: ID:" + sbn.getId() + " +++ " + sbn.getNotification().tickerText + " +++ " + sbn.getPackageName());
+    Log.i(LOGTAG, "***** DEBUG_jwir3: onNotificationRemoved: " + sbn);
+    Log.i(LOGTAG, "***** DEBUG_jwir3: ID:"
+                  + sbn.getId()
+                  + " +++ "
+                  + sbn.getNotification().tickerText
+                  + " +++ "
+                  + sbn.getPackageName());
   }
 
   @TargetApi(21)

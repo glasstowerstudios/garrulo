@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="GarruloMainTheme" parent="android:Theme.Material.Light">
         <item name="android:colorPrimary">@color/garrulo_primary_color</item>
         <item name="android:colorPrimaryDark">@color/garrulo_primary_dark_color</item>

@@ -4,9 +4,8 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
 
-import com.glasstowerstudios.garrulo.app.GarruloApplication;
-
 import com.glasstowerstudios.garrulo.R;
+import com.glasstowerstudios.garrulo.app.GarruloApplication;
 
 /**
  * Encapsulation of preferences specific to Garrulo.
@@ -16,26 +15,27 @@ import com.glasstowerstudios.garrulo.R;
  * instance of this object.
  */
 public class GarruloPreferences {
-    private boolean mNFCEnabled;
-    private boolean mSuppressDefaultNotificationSound;
+  private boolean mNFCEnabled;
+  private boolean mSuppressDefaultNotificationSound;
 
-    private GarruloPreferences() {
-        GarruloApplication app = GarruloApplication.getInstance();
-        Resources res = app.getResources();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(app);
-        mNFCEnabled = prefs.getBoolean(res.getString(R.string.pref_key_nfc_onoff), false);
-        mSuppressDefaultNotificationSound = prefs.getBoolean(res.getString(R.string.pref_key_suppress_notification_sound), false);
-    }
+  private GarruloPreferences() {
+    GarruloApplication app = GarruloApplication.getInstance();
+    Resources res = app.getResources();
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(app);
+    mNFCEnabled = prefs.getBoolean(res.getString(R.string.pref_key_nfc_onoff), false);
+    mSuppressDefaultNotificationSound =
+      prefs.getBoolean(res.getString(R.string.pref_key_suppress_notification_sound), false);
+  }
 
-    public boolean isNFCEnabled() {
-        return mNFCEnabled;
-    }
+  public boolean isNFCEnabled() {
+    return mNFCEnabled;
+  }
 
-    public boolean isSuppressDefaultNotificationSound() {
-        return mSuppressDefaultNotificationSound;
-    }
+  public boolean isSuppressDefaultNotificationSound() {
+    return mSuppressDefaultNotificationSound;
+  }
 
-    public static GarruloPreferences getPreferences() {
-        return new GarruloPreferences();
-    }
+  public static GarruloPreferences getPreferences() {
+    return new GarruloPreferences();
+  }
 }

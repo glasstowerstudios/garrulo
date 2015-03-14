@@ -34,8 +34,7 @@ public class GarruloApplication extends Application {
   }
 
   /**
-   * Suppress notifications from playing the default notification ringtone when Garrulo is
-   * active.
+   * Suppress notifications from playing the default notification ringtone when Garrulo is active.
    */
   public void suppressNotifications() {
     if (!mAreNotificationsSuppressed) {
@@ -92,11 +91,12 @@ public class GarruloApplication extends Application {
    * notifications.
    *
    * @return true, if access has been granted to this application to listen for notifications;
-   *         false, otherwise.
+   * false, otherwise.
    */
   public static boolean isNotificationListenerAccessGranted() {
     ContentResolver contentResolver = GarruloApplication.getInstance().getContentResolver();
-    String enabledNotificationListeners = Settings.Secure.getString(contentResolver, "enabled_notification_listeners");
+    String enabledNotificationListeners =
+      Settings.Secure.getString(contentResolver, "enabled_notification_listeners");
     String packageName = GarruloApplication.getInstance().getPackageName();
     Log.d(LOGTAG, "Checking for '" + packageName + "' in enabled notification listeners");
     Log.d(LOGTAG, "Package enabled for notification listeners: " + enabledNotificationListeners);
