@@ -37,25 +37,6 @@ public abstract class TTSAdapter {
   public abstract void shutdown();
 
   /**
-   * Add a {@link android.speech.tts.TextToSpeech.OnInitListener} to receive notifications when
-   * initialization has happened.
-   *
-   * @param aListener The {@link android.speech.tts.TextToSpeech.OnInitListener} to receive
-   *                  notifications of initialization when they occur.
-   */
-  public abstract void addOnInitListener(TextToSpeech.OnInitListener aListener);
-
-  /**
-   * Remove a previously added {@link android.speech.tts.TextToSpeech.OnInitListener} and prevent it
-   * from receiving notifications when initialization has happened.
-   *
-   * @param aListener The {@link android.speech.tts.TextToSpeech.OnInitListener} that was previously
-   *                  added to the list of listeners to receive notifications of initialization when
-   *                  they occur.
-   */
-  public abstract void removeOnInitListener(TextToSpeech.OnInitListener aListener);
-
-  /**
    * Determine if this adapter has been bound to an {@link android.app.Activity}.
    *
    * @return true, if this adapter is bound to an activity and onInit has been called; false,

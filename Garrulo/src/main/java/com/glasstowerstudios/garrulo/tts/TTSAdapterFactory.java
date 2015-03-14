@@ -13,7 +13,7 @@ public abstract class TTSAdapterFactory {
   /**
    * Retrieve an instance of the {@link TTSAdapter}, or create one if one is not yet available.
    *
-   * This method currently is bound to {@link TTSAdapterImpl}, but if additional implementations are
+   * This method currently is bound to {@link QueuedSpeakingAdapter}, but if additional implementations are
    * created in the future, it can be refactored to take a class parameter instead.
    *
    * @return A static instance of {@link TTSAdapter}.
@@ -24,12 +24,12 @@ public abstract class TTSAdapterFactory {
         Class<? extends TTSAdapter> clazz =
           Class.forName(TTSAdapterFactory.class.getPackage().getName()
                         + "."
-                        + TTSAdapterImpl.class.getSimpleName())
+                        + QueuedSpeakingAdapter.class.getSimpleName())
                .asSubclass(TTSAdapter.class);
         sInstance = clazz.newInstance();
       } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
         Log.e(LOGTAG,
-              "Unable to instantiate instance of class: " + TTSAdapterImpl.class.getSimpleName(),
+              "Unable to instantiate instance of class: " + QueuedSpeakingAdapter.class.getSimpleName(),
               e);
         throw new IllegalArgumentException(e);
       }
