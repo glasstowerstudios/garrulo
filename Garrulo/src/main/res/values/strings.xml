@@ -45,4 +45,8 @@
 
     <!-- Communicator Strings -->
     <string name="communicator_intent">com.glasstowerstudios.garrulo.LISTENER_COMMUNICATION</string>
+
+    <!-- Main Activity Strings -->
+    <string name="service_enabled">Enabled</string>
+    <string name="service_disabled">Disabled</string>
 </resources>
