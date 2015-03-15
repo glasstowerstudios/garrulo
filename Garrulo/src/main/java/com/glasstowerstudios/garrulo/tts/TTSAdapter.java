@@ -37,6 +37,27 @@ public abstract class TTSAdapter {
   public abstract void shutdown();
 
   /**
+   * Retrieves whether or not this {@link com.glasstowerstudios.garrulo.tts.TTSAdapter} has been
+   * paused, but not resumed.
+   *
+   * @return true, if this adapter has been paused but not yet resumed; false, otherwise.
+   */
+  public abstract boolean isPaused();
+
+  /**
+   * Pauses any speaking currently happening.
+   */
+  public abstract void pause();
+
+  /**
+   * Resumes speaking after a call to {@link #pause()}.
+   *
+   * Implementations may rewind the playback in order to account for any missed seconds during the
+   * pause/resume switchover, but this functionality is not required.
+   */
+  public abstract void resume();
+
+  /**
    * Determine if this adapter has been bound to an {@link android.app.Activity}.
    *
    * @return true, if this adapter is bound to an activity and onInit has been called; false,

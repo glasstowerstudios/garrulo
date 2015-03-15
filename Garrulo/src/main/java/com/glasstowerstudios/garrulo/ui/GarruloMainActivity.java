@@ -216,6 +216,7 @@ public class GarruloMainActivity
 
   private void disableSpeakingTest() {
     mShouldStop = true;
+    mAdapter.pause();
     mTestMenuItem.setEnabled(true);
     mStopTestMenuItem.setEnabled(false);
   }

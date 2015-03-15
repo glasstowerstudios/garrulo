@@ -30,6 +30,8 @@ public class QueuedSpeakingAdapter
   private Thread mSpeakingThread;
   private AudioManager mAudioManager;
   private boolean mHasAudioFocus = false;
+  private String mCurrentlyBeingSpoken;
+  private boolean mPaused = false;
 
   @Override
   public void init(Context aContext) {
@@ -79,6 +81,26 @@ public class QueuedSpeakingAdapter
   }
 
   @Override
+  public void pause() {
+    if (mTts.isSpeaking()) {
+      mTts.stop();
+      mSpeakingQueue.addFirst(mCurrentlyBeingSpoken);
+      mCurrentlyBeingSpoken = null;
+      mPaused = true;
+    }
+  }
+
+  @Override
+  public void resume() {
+    mPaused = false;
+  }
+
+  @Override
+  public boolean isPaused() {
+    return mPaused;
+  }
+
+  @Override
   public void onInit(int status) {
     if (status == TextToSpeech.SUCCESS) {
       mReady = true;
@@ -98,11 +120,10 @@ public class QueuedSpeakingAdapter
 
     // Make sure we can get audio focus before we do anything.
     if (mHasAudioFocus) {
-      String nextThingToSpeak = mSpeakingQueue.peekFirst();
-      if (mReady) {
+      if (mReady && !isPaused() && !mTts.isSpeaking()) {
         // If we aren't ready, it's ok, because we'll speak at the next go-around.
-        mTts.speak(nextThingToSpeak, TextToSpeech.QUEUE_ADD, null);
-        mSpeakingQueue.pop();
+        mCurrentlyBeingSpoken = mSpeakingQueue.pop();
+        mTts.speak(mCurrentlyBeingSpoken, TextToSpeech.QUEUE_ADD, null);
       }
     } else {
       requestAudioFocus();
@@ -170,11 +191,15 @@ public class QueuedSpeakingAdapter
     switch(focusChange) {
       case AudioManager.AUDIOFOCUS_GAIN:
         mHasAudioFocus = true;
+        if (isPaused()) {
+          resume();
+        }
+
         break;
 
       case AudioManager.AUDIOFOCUS_LOSS:
         mHasAudioFocus = false;
-        // TODO: We should probably interrupt the speaking here.
+        pause();
         break;
     }
   }
