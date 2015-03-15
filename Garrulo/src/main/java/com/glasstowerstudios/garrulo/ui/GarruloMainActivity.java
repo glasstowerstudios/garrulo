@@ -11,6 +11,8 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.glasstowerstudios.garrulo.R;
 import com.glasstowerstudios.garrulo.app.GarruloApplication;
@@ -25,7 +27,8 @@ import com.glasstowerstudios.garrulo.tts.TTSAdapterFactory;
  * This activity also contains some test data for testing TextToSpeech (TTS) capabilities.
  */
 public class GarruloMainActivity
-  extends Activity {
+  extends Activity
+  implements View.OnClickListener {
 
   private static final String LOGTAG = GarruloMainActivity.class.getSimpleName();
 
@@ -36,9 +39,10 @@ public class GarruloMainActivity
 
   private MenuItem mTestMenuItem;
   private MenuItem mStopTestMenuItem;
-  private MenuItem mStartListening;
-  private MenuItem mStopListening;
 
+  private boolean mIsListening = true;
+
+  private TextView mServiceIndicator;
   private boolean mShouldStop = false;
 
   private TTSAdapter mAdapter;
@@ -54,6 +58,10 @@ public class GarruloMainActivity
     if (GarruloPreferences.getPreferences().shouldSuppressDefaultNotificationSound()) {
       GarruloApplication.getInstance().suppressNotifications();
     }
+
+    mServiceIndicator = (TextView) findViewById(R.id.service_running_indicator);
+
+    mServiceIndicator.setOnClickListener(this);
   }
 
   @Override
@@ -78,8 +86,7 @@ public class GarruloMainActivity
     mTestMenuItem = menu.findItem(R.id.action_test);
     mStopTestMenuItem = menu.findItem(R.id.action_stop_test);
 
-    mStartListening = menu.findItem(R.id.action_start_notification_listener);
-    mStopListening = menu.findItem(R.id.action_stop_notification_listener);
+    startListening();
     return true;
   }
 
@@ -93,14 +100,6 @@ public class GarruloMainActivity
     switch (id) {
       case R.id.action_settings:
         startActivity(new Intent(this, SettingsActivity.class));
-        break;
-      case R.id.action_start_notification_listener:
-        // Start the listener
-        startListening();
-        break;
-      case R.id.action_stop_notification_listener:
-        // Stop the listener
-        stopListening();
         break;
       case R.id.action_notify:
         Log.d(LOGTAG, "Sending notification");
@@ -135,24 +134,42 @@ public class GarruloMainActivity
    * Discontinue listening for notifications.
    */
   private void stopListening() {
+    int disabledTextColor = getResources().getColor(R.color.disabled_red_text);
+    TextView serviceRunningIndicator = (TextView) findViewById(R.id.service_running_indicator);
+    serviceRunningIndicator.setTextColor(disabledTextColor);
+
     Intent serviceStopIntent = new Intent(getResources().getString(R.string.communicator_intent));
     serviceStopIntent.putExtra("command", "shutdown");
-    Log.d(LOGTAG, "***** DEBUG_jwir3: Sending intent: " + serviceStopIntent);
     sendBroadcast(serviceStopIntent);
-    mStartListening.setEnabled(true);
-    mStopListening.setEnabled(false);
+
+    mIsListening = false;
+
+    mServiceIndicator.setBackground(getResources().getDrawable(R.drawable.garrulo_running_indicator_background_disabled));
+    mServiceIndicator.setText(getResources().getString(R.string.service_disabled));
+    mAdapter.pause();
   }
 
   /**
    * Begin listening for notifications.
    */
   private void startListening() {
+    int enabledTextColor = getResources().getColor(R.color.active_green_text);
+    TextView serviceRunningIndicator = (TextView) findViewById(R.id.service_running_indicator);
+    serviceRunningIndicator.setTextColor(enabledTextColor);
+
     Intent serviceStartIntent = new Intent(getResources().getString(R.string.communicator_intent));
     serviceStartIntent.putExtra("command", "startup");
-    Log.d(LOGTAG, "***** DEBUG_jwir3: Sending intent: " + serviceStartIntent);
     sendBroadcast(serviceStartIntent);
-    mStartListening.setEnabled(false);
-    mStopListening.setEnabled(true);
+
+    mIsListening = true;
+
+    mServiceIndicator.setBackground(
+      getResources().getDrawable(R.drawable.garrulo_running_indicator_background_enabled));
+    mServiceIndicator.setText(getResources().getString(R.string.service_enabled));
+
+    if (mAdapter.isPaused()) {
+      mAdapter.resume();
+    }
   }
 
   /**
@@ -219,5 +236,14 @@ public class GarruloMainActivity
     mAdapter.pause();
     mTestMenuItem.setEnabled(true);
     mStopTestMenuItem.setEnabled(false);
+  }
+
+  @Override
+  public void onClick(View aView) {
+    if (mIsListening) {
+      stopListening();
+    } else {
+      startListening();
+    }
   }
 }

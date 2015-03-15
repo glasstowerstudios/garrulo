@@ -104,12 +104,9 @@ public class GeneralNotificationListenerService extends NotificationListenerServ
   class GarruloListeningCommunicator extends BroadcastReceiver {
     @Override
     public void onReceive(Context aContext, Intent aIntent) {
-      Log.d(LOGTAG, "***** DEBUG_jwir3: Received command");
       if (aIntent.getStringExtra("command").equals("shutdown")) {
-        Log.d(LOGTAG, "***** DEBUG_jwir3: Received shutdown command");
         GeneralNotificationListenerService.this.stopListening();
       } else if (aIntent.getStringExtra("command").equals("startup")) {
-        Log.d(LOGTAG, "***** DEBUG_jwir3: Received startup command");
         GeneralNotificationListenerService.this.startListening();
       }
     }
