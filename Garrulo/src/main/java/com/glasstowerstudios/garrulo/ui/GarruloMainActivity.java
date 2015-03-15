@@ -146,6 +146,7 @@ public class GarruloMainActivity
 
     mServiceIndicator.setBackground(getResources().getDrawable(R.drawable.garrulo_running_indicator_background_disabled));
     mServiceIndicator.setText(getResources().getString(R.string.service_disabled));
+    mAdapter.pause();
   }
 
   /**
@@ -165,6 +166,10 @@ public class GarruloMainActivity
     mServiceIndicator.setBackground(
       getResources().getDrawable(R.drawable.garrulo_running_indicator_background_enabled));
     mServiceIndicator.setText(getResources().getString(R.string.service_enabled));
+
+    if (mAdapter.isPaused()) {
+      mAdapter.resume();
+    }
   }
 
   /**
