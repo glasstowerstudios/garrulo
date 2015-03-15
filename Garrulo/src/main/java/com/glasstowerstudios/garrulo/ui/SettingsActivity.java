@@ -13,6 +13,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.SwitchPreference;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -124,8 +125,7 @@ public class SettingsActivity extends PreferenceActivity {
    * PreferenceFragment}. In these cases, a single-pane "simplified" settings UI should be shown.
    */
   private static boolean isSimplePreferences() {
-    return ALWAYS_SIMPLE_PREFS
-           || Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB;
+    return Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB;
   }
 
   /**
@@ -133,32 +133,10 @@ public class SettingsActivity extends PreferenceActivity {
    * two-pane settings UI.
    */
   public static class GeneralPreferenceFragment extends PreferenceFragment {
-    private Preference.OnPreferenceChangeListener mCheckGeneralPrefListener =
-      new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference aPref, Object aNewValue) {
-          String key = aPref.getKey();
-          if (key.equals(getResources().getString(R.string.pref_key_suppress_notification_sound))) {
-            GarruloApplication app = GarruloApplication.getInstance();
-            Boolean boolValue = (Boolean) aNewValue;
-            if (boolValue.booleanValue()) {
-              app.suppressNotifications();
-            } else {
-              app.unsuppressNotifications();
-            }
-          }
-
-          return true;
-        }
-      };
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       addPreferencesFromResource(R.xml.pref_general);
-      Preference notificationPref =
-        findPreference(getResources().getString(R.string.pref_key_suppress_notification_sound));
-      notificationPref.setOnPreferenceChangeListener(mCheckGeneralPrefListener);
     }
   }
 
@@ -178,7 +156,7 @@ public class SettingsActivity extends PreferenceActivity {
             Boolean value = (Boolean) aNewValue;
 
             // If we're enabling NFC, then let's check to make sure it can be enabled.
-            if (value.booleanValue()) {
+            if (value) {
               SwitchPreference switchPref = (SwitchPreference) aPref;
               if (switchPref.getKey().equals(GarruloApplication.getInstance().getResources()
                                                                .getString(
@@ -187,7 +165,7 @@ public class SettingsActivity extends PreferenceActivity {
                   // Verify NFC is enabled in the System Settings
                   Context appContext = GarruloApplication.getInstance();
                   Resources appResources = appContext.getResources();
-                  if (!GarruloApplication.getInstance().isNFCEnabled()) {
+                  if (!GarruloApplication.isNFCEnabled()) {
                     // NFC is available but not enabled on this device.
                     DialogInterface.OnClickListener listener =
                       new DialogInterface.OnClickListener() {
@@ -234,13 +212,13 @@ public class SettingsActivity extends PreferenceActivity {
       super.onResume();
 
       // Check if NFC is enabled
-      if (!GarruloApplication.getInstance().isNFCEnabled() && mNFCPreference.isChecked()) {
+      if (!GarruloApplication.isNFCEnabled() && mNFCPreference.isChecked()) {
         mNFCPreference.setChecked(false);
       }
     }
 
     @Override
-    public View onCreateView(LayoutInflater aInflater,
+    public View onCreateView(@NonNull LayoutInflater aInflater,
                              ViewGroup aContainer,
                              Bundle aSavedInstanceState) {
       View view = super.onCreateView(aInflater, aContainer, aSavedInstanceState);
@@ -256,6 +234,5 @@ public class SettingsActivity extends PreferenceActivity {
       }
       return view;
     }
-
   }
 }

@@ -5,11 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
-import android.util.Log;
 
 import com.glasstowerstudios.garrulo.comm.GarruloMessage;
 import com.glasstowerstudios.garrulo.comm.GarruloMessageHandler;
 import com.glasstowerstudios.garrulo.comm.SMSMessageHandler;
+import com.glasstowerstudios.garrulo.pref.GarruloPreferences;
 
 /**
  * Broadcast receiver that handles actions to be performed when an SMS message is received.
@@ -29,10 +29,7 @@ public class SMSReceiver
 
   @Override
   public void onReceive(Context aContext, Intent aIntent) {
-    Log.d(LOGTAG, "SMSReceiver received an intent of type: " + aIntent.getAction());
-
     if (aIntent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")) {
-      Log.d(LOGTAG, "Received an intent for Telephony.SMS_RECEIVED");
       Bundle extras = aIntent.getExtras();
       SmsMessage messages[] = null;
       if (extras != null) {
@@ -45,8 +42,13 @@ public class SMSReceiver
           String sender = messages[i].getOriginatingAddress();
           String text = messages[i].getMessageBody();
           GarruloMessage msg = new GarruloMessage(sender, text);
-          Log.d(LOGTAG, "***** DEBUG_jwir3: About to process message from: " + sender);
           mMessageHandler.process(msg);
+
+          // If we want to suppress notifications, then we should abort the broadcast so it doesn't
+          // get to the default SMS application.
+          if (GarruloPreferences.getPreferences().shouldSuppressDefaultNotificationSound()) {
+            abortBroadcast();
+          }
         }
       }
     }

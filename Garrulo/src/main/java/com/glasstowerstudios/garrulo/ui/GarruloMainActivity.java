@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.glasstowerstudios.garrulo.R;
 import com.glasstowerstudios.garrulo.app.GarruloApplication;
-import com.glasstowerstudios.garrulo.pref.GarruloPreferences;
 import com.glasstowerstudios.garrulo.service.GarruloListenerService;
 import com.glasstowerstudios.garrulo.tts.TTSAdapter;
 import com.glasstowerstudios.garrulo.tts.TTSAdapterFactory;
@@ -55,10 +54,6 @@ public class GarruloMainActivity
     mAdapter.init(this);
     startService(new Intent(this, GarruloListenerService.class));
 
-    if (GarruloPreferences.getPreferences().shouldSuppressDefaultNotificationSound()) {
-      GarruloApplication.getInstance().suppressNotifications();
-    }
-
     mServiceIndicator = (TextView) findViewById(R.id.service_running_indicator);
 
     mServiceIndicator.setOnClickListener(this);
@@ -70,7 +65,7 @@ public class GarruloMainActivity
     stopService(new Intent(this, GarruloListenerService.class));
     mAdapter.shutdown();
 
-    GarruloApplication.getInstance().unsuppressNotifications();
+    GarruloApplication.getInstance().unsuppressAllNotificationSounds();
   }
 
   @Override

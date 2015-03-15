@@ -35,10 +35,11 @@ public class GarruloApplication extends Application {
 
   /**
    * Suppress notifications from playing the default notification ringtone when Garrulo is active.
+   *
+   * Note: This affects ALL notifications.
    */
-  public void suppressNotifications() {
+  public void suppressAllNotificationSounds() {
     if (!mAreNotificationsSuppressed) {
-      Log.d(LOGTAG, "Muting notification stream");
       AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
       audioManager.setStreamMute(AudioManager.STREAM_NOTIFICATION, true);
       mAreNotificationsSuppressed = true;
@@ -46,11 +47,13 @@ public class GarruloApplication extends Application {
   }
 
   /**
-   * Turn off suppression of notifications.
+   * Turn off suppression of notifications that was enabled with {@link
+   * #suppressAllNotificationSounds()}.
+   *
+   * Note: This affects ALL notifications.
    */
-  public void unsuppressNotifications() {
+  public void unsuppressAllNotificationSounds() {
     if (mAreNotificationsSuppressed) {
-      Log.d(LOGTAG, "Unmuting notification stream");
       AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
       audioManager.setStreamMute(AudioManager.STREAM_NOTIFICATION, false);
       mAreNotificationsSuppressed = false;
