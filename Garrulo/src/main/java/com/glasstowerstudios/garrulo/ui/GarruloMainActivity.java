@@ -1,10 +1,7 @@
 package com.glasstowerstudios.garrulo.ui;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.NotificationManager;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
@@ -75,7 +72,6 @@ public class GarruloMainActivity
   @Override
   public void onResume() {
     super.onResume();
-    ensureNotificationAccessGranted();
   }
 
   @Override
@@ -175,41 +171,6 @@ public class GarruloMainActivity
 
     if (mAdapter.isPaused()) {
       mAdapter.resume();
-    }
-  }
-
-  /**
-   * Verifies that access to listen to notifications has been granted by the user, and if not,
-   * prompts the user to navigate to the Settings application to enable this permission.
-   */
-  private void ensureNotificationAccessGranted() {
-    if (!GarruloApplication.isNotificationListenerAccessGranted()) {
-      DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface aDialog, int aWhich) {
-          switch (aWhich) {
-            case Dialog.BUTTON_NEGATIVE:
-              aDialog.dismiss();
-              break;
-
-            case Dialog.BUTTON_POSITIVE:
-              Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-              startActivity(intent);
-              aDialog.dismiss();
-              break;
-          }
-        }
-      };
-
-      AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-      dialogBuilder.setTitle(getResources().getString(R.string.notification_listener_access_title));
-      dialogBuilder
-        .setMessage(getResources().getString(R.string.notification_listener_access_warning));
-      dialogBuilder.setNegativeButton(R.string.notification_listener_response_negative, listener);
-      dialogBuilder.setPositiveButton(R.string.notification_listener_response_positive, listener);
-      AlertDialog dialog = dialogBuilder.create();
-      dialog.show();
-
     }
   }
 

@@ -1,12 +1,10 @@
 package com.glasstowerstudios.garrulo.app;
 
 import android.app.Application;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.media.AudioManager;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcManager;
-import android.provider.Settings;
 import android.util.Log;
 
 /**
@@ -87,30 +85,5 @@ public class GarruloApplication extends Application {
     final NfcManager manager = (NfcManager) appContext.getSystemService(Context.NFC_SERVICE);
     NfcAdapter adapter = manager.getDefaultAdapter();
     return adapter.isEnabled();
-  }
-
-  /**
-   * Determines if access to notifications has been granted for the purpose of listening for
-   * notifications.
-   *
-   * @return true, if access has been granted to this application to listen for notifications;
-   * false, otherwise.
-   */
-  public static boolean isNotificationListenerAccessGranted() {
-    ContentResolver contentResolver = GarruloApplication.getInstance().getContentResolver();
-    String enabledNotificationListeners =
-      Settings.Secure.getString(contentResolver, "enabled_notification_listeners");
-    String packageName = GarruloApplication.getInstance().getPackageName();
-    Log.d(LOGTAG, "Checking for '" + packageName + "' in enabled notification listeners");
-    Log.d(LOGTAG, "Package enabled for notification listeners: " + enabledNotificationListeners);
-
-    // check to see if the enabledNotificationListeners String contains our package name
-    if (enabledNotificationListeners == null
-        || !enabledNotificationListeners.contains(packageName)) {
-      Log.d(LOGTAG, "Did not see '" + packageName + "' in enabled packages");
-      return false;
-    }
-
-    return true;
   }
 }
