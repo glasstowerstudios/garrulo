@@ -1,0 +1,8 @@
+ext.gitSha = {
+  return 'git rev-parse --short HEAD'.execute().text.trim()
+}
+
+ext.gitShaLong = {
+  return 'git rev-parse HEAD'.execute().text.trim()
+}
+

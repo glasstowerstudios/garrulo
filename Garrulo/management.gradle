@@ -1,0 +1,17 @@
+apply from: 'util.gradle'
+
+def getDateTimePath(aDate) {
+  return aDate.format("yyyy/MMM/dd")
+}
+
+task outputProjectVersion(description: 'Output the project version', group: 'Management') << {
+  println android.defaultConfig.versionName
+}
+
+task outputProjectName(description: 'Output the project name', group: 'Management') << {
+  println project.name
+}
+
+// Task designed to bump version numbers. This should be the first task run
+// after a new release branch is created.
+task bumpVersion(type: BumpVersionTask, description: 'Bumps the version number of the current Android release. Should be used as a standalone task, and should only be the first task called after creating a release branch.', group: 'Management')
