@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.glasstowerstudios.garrulo.BuildConfig;
 import com.glasstowerstudios.garrulo.R;
 import com.glasstowerstudios.garrulo.app.GarruloApplication;
 import com.glasstowerstudios.garrulo.service.GarruloListenerService;
@@ -38,6 +39,9 @@ public class GarruloMainActivity
 
   private MenuItem mTestMenuItem;
   private MenuItem mStopTestMenuItem;
+  private MenuItem mNotifyMenuItem;
+  private MenuItem mStartNotificationListenerMenuItem;
+  private MenuItem mStopNotificationListenerMenuItem;
 
   private boolean mIsListening = true;
 
@@ -78,8 +82,21 @@ public class GarruloMainActivity
   public boolean onCreateOptionsMenu(Menu menu) {
     // Inflate the menu; this adds items to the action bar if it is present.
     getMenuInflater().inflate(R.menu.menu_garrulo_main, menu);
+
     mTestMenuItem = menu.findItem(R.id.action_test);
     mStopTestMenuItem = menu.findItem(R.id.action_stop_test);
+    mNotifyMenuItem = menu.findItem(R.id.action_notify);
+    mStartNotificationListenerMenuItem = menu.findItem(R.id.action_start_notification_listener);
+    mStopNotificationListenerMenuItem = menu.findItem(R.id.action_stop_notification_listener);
+
+    // If we're not in DEBUG mode, then suppress the debug-only menu options.
+    if (!BuildConfig.DEBUG) {
+      mTestMenuItem.setVisible(false);
+      mStopTestMenuItem.setVisible(false);
+      mNotifyMenuItem.setVisible(false);
+      mStartNotificationListenerMenuItem.setVisible(false);
+      mStopNotificationListenerMenuItem.setVisible(false);
+    }
 
     startListening();
     return true;
@@ -114,12 +131,6 @@ public class GarruloMainActivity
       case R.id.action_stop_test:
         disableSpeakingTest();
         break;
-      case R.id.action_quit:
-        stopListening();
-        GarruloMainActivity.this.finish();
-        android.os.Process.killProcess(android.os.Process.myPid());
-        getParent().finish();
-        System.exit(0);
     }
 
     return super.onOptionsItemSelected(item);

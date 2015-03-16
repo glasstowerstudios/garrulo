@@ -21,7 +21,8 @@ local.properties
 .DS_Store
 
 # Generated Files
-build
+**/build
+**/manifest-merger-*-report.txt
 
 # Crashlytics plugin (for Android Studio and IntelliJ)
 com_crashlytics_export_strings.xml

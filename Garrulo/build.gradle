@@ -1,22 +1,83 @@
+apply from: 'util.gradle'
+
 apply plugin: 'com.android.application'
 
 android {
   compileSdkVersion 21
   buildToolsVersion "21.1.1"
 
+  if (project.hasProperty("GTS_RELEASE_STORE_FILE")) {
+    signingConfigs {
+      release {
+        storeFile file(GTS_RELEASE_STORE_FILE)
+        storePassword GTS_RELEASE_STORE_PASSWORD
+        keyAlias GTS_RELEASE_KEY_ALIAS
+        keyPassword GTS_RELEASE_KEY_PASSWORD
+      }
+    }
+  }
+
+  buildTypes {
+    debug {
+      //buildConfig "public final static boolean DEBUG = true;"
+      versionNameSuffix "-" + gitSha()
+      zipAlignEnabled false
+    }
+
+    if (project.hasProperty("GTS_RELEASE_STORE_FILE")) {
+      release {
+        signingConfig signingConfigs.release
+        zipAlignEnabled true
+      }
+    }
+
+    // This next part renames the .apk file to include the version number
+    // as well as the git sha for the commit from which it was built.
+    project.android.applicationVariants.all { variant ->
+      variant.outputs.each { output ->
+        def oldFile;
+        if (variant.buildType.zipAlignEnabled) {
+          oldFile = output.outputFile;
+        } else {
+          oldFile = output.packageApplication.outputFile;
+        }
+
+        def newFile;
+        def newFileReplacement = "";
+
+        if (getVersionName().indexOf(gitSha()) != -1) {
+          newFileReplacement = newFileReplacement + "-" + getVersionName() + ".apk";
+        } else {
+          newFileReplacement = newFileReplacement + "-" + getVersionName() + "-" + gitSha() + ".apk"
+        }
+
+        newFile = oldFile.name.replace(".apk", newFileReplacement);
+
+        if (output.zipAlign) {
+          // Set the name of the final output file
+          output.zipAlign.outputFile = new File(oldFile.parent, newFile);
+
+          // Set the name of the intermediate file (input to zipAlign) to contain version
+          // information, too
+          def oldIntermediateFile = output.packageApplication.outputFile
+          def newIntermediateFile = output.packageApplication.outputFile.name.replace(".apk", newFileReplacement)
+          output.packageApplication.outputFile = new File(oldIntermediateFile.parent, newIntermediateFile)
+        } else {
+          // Set the name of the final output file (no intermediate file)
+          output.packageApplication.outputFile = new File(oldFile.parent, newFile);
+        }
+      }
+    }
+  }
+
   defaultConfig {
     applicationId "com.glasstowerstudios.garrulo"
     minSdkVersion 21
     targetSdkVersion 21
-    versionCode 1
-    versionName "1.0"
+    versionCode project.GARRULO_VERSION_CODE as int
+    versionName project.GARRULO_VERSION_NAME
   }
-  buildTypes {
-    release {
-      minifyEnabled true
-      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-    }
-  }
+
   compileOptions {
     sourceCompatibility JavaVersion.VERSION_1_7
     targetCompatibility JavaVersion.VERSION_1_7
@@ -32,3 +93,5 @@ dependencies {
   compile 'com.googlecode.libphonenumber:libphonenumber:7.0.1'
   compile 'com.android.support:support-v4:21.0.3'
 }
+
+apply from: 'management.gradle'
