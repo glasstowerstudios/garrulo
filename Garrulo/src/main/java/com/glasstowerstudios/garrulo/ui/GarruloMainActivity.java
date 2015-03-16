@@ -131,12 +131,6 @@ public class GarruloMainActivity
       case R.id.action_stop_test:
         disableSpeakingTest();
         break;
-      case R.id.action_quit:
-        stopListening();
-        GarruloMainActivity.this.finish();
-        android.os.Process.killProcess(android.os.Process.myPid());
-        getParent().finish();
-        System.exit(0);
     }
 
     return super.onOptionsItemSelected(item);
