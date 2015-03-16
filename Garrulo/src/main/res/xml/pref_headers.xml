@@ -5,9 +5,4 @@
         android:fragment="com.glasstowerstudios.garrulo.ui.SettingsActivity$GeneralPreferenceFragment"
         android:title="@string/pref_header_general"
         android:summary="@string/pref_header_general_summary" />
-    <header
-        android:fragment="com.glasstowerstudios.garrulo.ui.SettingsActivity$CommunicationPreferenceFragment"
-        android:title="@string/pref_header_communication"
-        android:summary="@string/pref_header_communication_summary" />
-
 </preference-headers>

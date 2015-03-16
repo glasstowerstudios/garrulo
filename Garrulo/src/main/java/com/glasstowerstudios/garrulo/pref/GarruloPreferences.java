@@ -20,14 +20,6 @@ public class GarruloPreferences {
   private GarruloPreferences() {
   }
 
-  public boolean isNFCEnabled() {
-    GarruloApplication app = GarruloApplication.getInstance();
-    Resources res = app.getResources();
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(app);
-
-    return prefs.getBoolean(res.getString(R.string.pref_key_nfc_onoff), false);
-  }
-
   public boolean shouldSuppressDefaultNotificationSound() {
     GarruloApplication app = GarruloApplication.getInstance();
     Resources res = app.getResources();

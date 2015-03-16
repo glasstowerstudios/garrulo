@@ -1,28 +1,14 @@
 package com.glasstowerstudios.garrulo.ui;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
-import android.preference.SwitchPreference;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.glasstowerstudios.garrulo.R;
-import com.glasstowerstudios.garrulo.app.GarruloApplication;
 
 import java.util.List;
 
@@ -88,7 +74,6 @@ public class SettingsActivity extends PreferenceActivity {
 
     // Add 'general' preferences.
     addPreferencesFromResource(R.xml.pref_general);
-    addPreferencesFromResource(R.xml.pref_communication);
   }
 
   /**
@@ -106,8 +91,7 @@ public class SettingsActivity extends PreferenceActivity {
 
   @Override
   public boolean isValidFragment(String aFragmentName) {
-    return GeneralPreferenceFragment.class.getName().equals(aFragmentName)
-           || CommunicationPreferenceFragment.class.getName().equals(aFragmentName);
+    return GeneralPreferenceFragment.class.getName().equals(aFragmentName);
   }
 
   /**
@@ -137,102 +121,6 @@ public class SettingsActivity extends PreferenceActivity {
     public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       addPreferencesFromResource(R.xml.pref_general);
-    }
-  }
-
-  /**
-   * This fragment shows communication preferences only. It is used when the activity is showing a
-   * two-pane settings UI.
-   */
-  public static class CommunicationPreferenceFragment extends PreferenceFragment {
-    private SwitchPreference mNFCPreference;
-
-    private Preference.OnPreferenceChangeListener mCheckNfcPrefsListener =
-      new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference aPref, Object aNewValue) {
-          String key = aPref.getKey();
-          if (key.equals(getResources().getString(R.string.pref_key_nfc_onoff))) {
-            Boolean value = (Boolean) aNewValue;
-
-            // If we're enabling NFC, then let's check to make sure it can be enabled.
-            if (value) {
-              SwitchPreference switchPref = (SwitchPreference) aPref;
-              if (switchPref.getKey().equals(GarruloApplication.getInstance().getResources()
-                                                               .getString(
-                                                                 R.string.pref_key_nfc_onoff))) {
-                if (switchPref.isEnabled()) {
-                  // Verify NFC is enabled in the System Settings
-                  Context appContext = GarruloApplication.getInstance();
-                  Resources appResources = appContext.getResources();
-                  if (!GarruloApplication.isNFCEnabled()) {
-                    // NFC is available but not enabled on this device.
-                    DialogInterface.OnClickListener listener =
-                      new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface aDialog, int aWhich) {
-                          if (aWhich == DialogInterface.BUTTON_NEGATIVE) {
-                            mNFCPreference.setChecked(false);
-                          } else {
-                            Intent settingsIntent = new Intent(Settings.ACTION_NFC_SETTINGS);
-                            getActivity().startActivity(settingsIntent);
-                          }
-
-                          aDialog.dismiss();
-                        }
-                      };
-
-                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
-                    dialogBuilder
-                      .setTitle(appResources.getString(R.string.pref_nfc_settings_alert_title));
-                    dialogBuilder
-                      .setMessage(appResources.getString(R.string.pref_nfc_settings_alert_message));
-                    dialogBuilder.setNegativeButton(R.string.pref_nfc_settings_negative, listener);
-                    dialogBuilder.setPositiveButton(R.string.pref_nfc_settings_positive, listener);
-                    AlertDialog dialog = dialogBuilder.create();
-                    dialog.show();
-                  }
-                }
-              }
-            }
-          }
-
-          return true;
-        }
-      };
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-      super.onCreate(savedInstanceState);
-      addPreferencesFromResource(R.xml.pref_communication);
-    }
-
-    @Override
-    public void onResume() {
-      super.onResume();
-
-      // Check if NFC is enabled
-      if (!GarruloApplication.isNFCEnabled() && mNFCPreference.isChecked()) {
-        mNFCPreference.setChecked(false);
-      }
-    }
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater aInflater,
-                             ViewGroup aContainer,
-                             Bundle aSavedInstanceState) {
-      View view = super.onCreateView(aInflater, aContainer, aSavedInstanceState);
-      mNFCPreference =
-        (SwitchPreference) findPreference(getResources().getString(R.string.pref_key_nfc_onoff));
-      mNFCPreference.setOnPreferenceChangeListener(mCheckNfcPrefsListener);
-      if (!GarruloApplication.isNFCAvailable()) {
-        mNFCPreference.setEnabled(false);
-        // NFC is not available on this device.
-        Log.e(LOGTAG, "Unable to enable NFC adapter - hardware unavailable");
-        Toast.makeText(getActivity(), getResources().getString(R.string.pref_nfc_not_available),
-                       Toast.LENGTH_LONG).show();
-      }
-      return view;
     }
   }
 }
