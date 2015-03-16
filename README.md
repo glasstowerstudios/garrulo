@@ -7,7 +7,7 @@ Introduction
 Garrulo is a small application designed to bring some smart functionality/programmability to notifications received on Android phones and tablets.
 
 ### Motivation ###
-The development motivation for Garrulo was because Android doesn't have a consistent, easy-to-use, cross-device/cross-manufacturer app that will read text messages and emails while driving. More specifically, for those individuals without bluetooth integration in their cars, it's difficult to find an app that will read SMS messages and can be easily turned on using NFC (as an NFC tag can be placed on the dashboard of a car and be programmed to automatically launch Garrulo when activated - see [NFC Setup](#nfc-setup) for more details).
+The development motivation for Garrulo was because Android doesn't have a consistent, easy-to-use, cross-device/cross-manufacturer app that will read text messages and emails while driving. More specifically, for those individuals without bluetooth integration in their cars, it's difficult to find an app that will read SMS messages and can be easily turned on using NFC (as an NFC tag can be placed on the dashboard of a car and be programmed to automatically launch Garrulo when activated - see the information about "NFC Setup", below, for more details).
 
 As time goes on, it's likely that Garrulo will provide more functionality than just SMS messages, including allowing emails, Facebook messages, Tweets, etc... to be read aloud, if desired.
 
@@ -31,7 +31,7 @@ Garrulo will display the following graphical interface for you to interact with 
 The large indicator at the top indicates whether Garrulo is running or stopped:
 
 <!-- Crop Spec: 0, 75 -- 1080x700px -->
-<center><img src="assets/screenshots/main-running-03-15-15.png" width="225" alt="Garrulo Running"/><img src="assets/screenshots/main-disabled-03-15-15.png" width="225" alt="Garrulo Disabled"/></center>
+<center><img src="assets/screenshots/main-running-03-15-15.png" width="225" alt="Garrulo Running"/>&nbsp;<img src="assets/screenshots/main-disabled-03-15-15.png" width="225" alt="Garrulo Disabled"/></center>
 
 ### Stopping Garrulo ###
 You can stop Garrulo from reading new notifications by tapping on the "Enabled" indicator when Garrulo is running. Similarly, you can request that Garrulo begin reading notifications again by tapping this indicator when Garrulo is disabled.
@@ -55,8 +55,9 @@ ___Ducking___ is a term used to describe a different type of audio focus managem
 Garrulo can allow another app (e.g. a music player) to duck while Garrulo reads notifications for you. To enable this setting, turn on the **Allow Volume Ducking** option from the **General** category of Garrulo's settings menu.
 
 ### NFC Setup ###
-### Using in Combination with Google Now ###
+In the near future, Garrulo will have internal settings that allow it to directly write to NFC tags, enabling you to be able to trigger Garrulo from an NFC tag without using an external application.
 
+For now, though, it's necessary to launch Garrulo using an external application if you want it to launch when your phone comes into proximity of an NFC tag. The only application that our developers have tested with Garrulo is [Trigger](https://play.google.com/store/apps/details?id=com.jwsoft.nfcactionlauncher). It works quite well, and you can purchase ready-to-use NFC tags through the application's website at [tagstand.com](http://www.tagstand.com/).
 
 Security and Privacy
 ---------------------
