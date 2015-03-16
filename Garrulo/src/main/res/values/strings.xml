@@ -8,7 +8,7 @@
     <string name="action_quit">Quit</string>
 
     <!-- Main Activity Strings -->
-    <string name="main_instructions">Garrulo will read notifications while running. To stop Garrulo, select "Stop Reading" from the menu in the action bar.</string>
+    <string name="main_instructions">Garrulo will read SMS messages while enabled. To toggle whether Garrulo is enabled, tap the button above.</string>
     <string name="action_notify">Notify</string>
     <string name="action_start_notification_listening">Start Notification Listener</string>
     <string name="action_stop_notification_listening">Stop Notification Listener</string>
