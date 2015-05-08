@@ -64,9 +64,9 @@ Security and Privacy
 ### Permissions Requested ###
 The following is an explanation of why Garrulo requests the permissions it does:
 
-  Name | Permission ID | Reason
+  Displays as | Permission ID | Reason
   ---- | ------------- | -------
-       | android.permission.RECEIVE_SMS | Garrulo needs this permission to intercept SMS messages in order to read them out loud.
+  SMS - Uses one or more of SMS, MMS. Charges may apply | android.permission.RECEIVE_SMS | Garrulo needs this permission to intercept SMS messages in order to read them out loud.
        | android.permission.READ_CONTACTS | When Garrulo reads a new SMS message, it attempts to search for the contact in your Contacts. This is so that Garrulo can read "New Text Message from John Snow", rather than "New Text Message from +15551112222", if it finds that John Snow is listed in your Contacts with the number +15551112222.
        | android.permission.READ_PHONE_STATE | This permission is used to read information about the phone state, such as the phone number. It's also used by apps to mute audio output if you receive a call. Garrulo used to use this permission to identify your phone number, so that if it needed to, it could replace your name or phone number with "you". It doesn't do this anymore, though, so we're researching whether we can remove this permission, and it may be removed in future versions.
 
