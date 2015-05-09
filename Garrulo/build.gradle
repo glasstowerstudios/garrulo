@@ -2,6 +2,10 @@ apply from: 'util.gradle'
 
 apply plugin: 'com.android.application'
 
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.4'
+}
+
 android {
   compileSdkVersion 21
   buildToolsVersion "21.1.1"
