@@ -1,6 +1,18 @@
 apply from: 'util.gradle'
 
-apply plugin: 'com.android.application'
+buildscript {
+    repositories {
+        mavenCentral()
+        //maven { url 'http://download.crashlytics.com/maven' }
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.0.0'
+        //classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
+    }
+}
+
+apply plugin: 'android'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.4'
@@ -8,7 +20,7 @@ task wrapper(type: Wrapper) {
 
 android {
   compileSdkVersion 21
-  buildToolsVersion "21.1.1"
+  buildToolsVersion "22.0.1"
 
   if (project.hasProperty("GTS_RELEASE_STORE_FILE")) {
     signingConfigs {
