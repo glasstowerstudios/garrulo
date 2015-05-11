@@ -4,4 +4,18 @@
         android:title="@string/pref_title_nfc_onoff"
         android:summary="@string/pref_summary_nfc_onoff"
         android:defaultValue="false" />
+    <SwitchPreference
+        android:key="@string/pref_key_nfc_polling_onoff"
+        android:title="@string/pref_title_nfc_polling_onoff"
+        android:summary="@string/pref_summary_nfc_polling_onoff"
+        android:dependency="@string/pref_key_nfc_onoff"
+        android:defaultValue="false" />
+    <EditTextPreference
+        android:key="@string/pref_key_nfc_polling_frequency"
+        android:title="@string/pref_title_nfc_polling_frequency"
+        android:dependency="@string/pref_key_nfc_polling_onoff"
+        android:inputType="number"
+        android:hint="@string/pref_hint_nfc_polling_frequency"
+        android:defaultValue="1" />
+
 </PreferenceScreen>

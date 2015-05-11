@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
@@ -146,6 +147,25 @@ public class SettingsActivity extends PreferenceActivity {
    */
   public static class CommunicationPreferenceFragment extends PreferenceFragment {
     private SwitchPreference mNFCPreference;
+    private EditTextPreference mNFCPollingFrequencyPreference;
+
+    private Preference.OnPreferenceChangeListener mFrequencyCheckListener =
+      new Preference.OnPreferenceChangeListener() {
+        @Override
+        public boolean onPreferenceChange(Preference aPref, Object aNewValue) {
+          String key = aPref.getKey();
+          String stringValue = (String)aNewValue;
+          if (!isPollingFrequencyValid(stringValue)) {
+            return false;
+          }
+
+          if (key.equals(getResources().getString(R.string.pref_key_nfc_polling_frequency))) {
+            ensurePollingFrequencyInSummary(stringValue);
+          }
+
+          return true;
+        }
+    };
 
     private Preference.OnPreferenceChangeListener mCheckNfcPrefsListener =
       new Preference.OnPreferenceChangeListener() {
@@ -153,10 +173,10 @@ public class SettingsActivity extends PreferenceActivity {
         public boolean onPreferenceChange(Preference aPref, Object aNewValue) {
           String key = aPref.getKey();
           if (key.equals(getResources().getString(R.string.pref_key_nfc_onoff))) {
-            Boolean value = (Boolean) aNewValue;
+            Boolean enablingNfc = (Boolean) aNewValue;
 
             // If we're enabling NFC, then let's check to make sure it can be enabled.
-            if (value) {
+            if (enablingNfc) {
               SwitchPreference switchPref = (SwitchPreference) aPref;
               if (switchPref.getKey().equals(GarruloApplication.getInstance().getResources()
                                                                .getString(
@@ -224,7 +244,14 @@ public class SettingsActivity extends PreferenceActivity {
       View view = super.onCreateView(aInflater, aContainer, aSavedInstanceState);
       mNFCPreference =
         (SwitchPreference) findPreference(getResources().getString(R.string.pref_key_nfc_onoff));
+      mNFCPollingFrequencyPreference =
+        (EditTextPreference) findPreference(getResources()
+                                            .getString(R.string.pref_key_nfc_polling_frequency));
+
+      // Set our listeners.
       mNFCPreference.setOnPreferenceChangeListener(mCheckNfcPrefsListener);
+      mNFCPollingFrequencyPreference.setOnPreferenceChangeListener(mFrequencyCheckListener);
+
       if (!GarruloApplication.isNFCAvailable()) {
         mNFCPreference.setEnabled(false);
         // NFC is not available on this device.
@@ -232,7 +259,48 @@ public class SettingsActivity extends PreferenceActivity {
         Toast.makeText(getActivity(), getResources().getString(R.string.pref_nfc_not_available),
                        Toast.LENGTH_LONG).show();
       }
+
+      ensurePollingFrequencyInSummary(mNFCPollingFrequencyPreference.getText());
       return view;
+    }
+
+    /**
+     * Determine if a specified polling frequency is within the acceptable range.
+     *
+     * Our polling frequency, for NFC, must be between 1 and infinity (i.e non-negative, non-zero
+     * integers). Actually, it can only be 1 - MAX_INT (2^31 - 1).
+     *
+     * @param aNewFrequencyString The string, derived from an {@link EditTextPreference} to be
+     *                            converted to an {@link int} and checked whether it is within the
+     *                            range of acceptable values.
+     *
+     * @return true, if aNewFrequencyString represents an integer between 1 - MAX_INT; false,
+     *         otherwise.
+     */
+    private boolean isPollingFrequencyValid(String aNewFrequencyString) {
+      int quantity = Integer.parseInt(aNewFrequencyString);
+      return quantity > 0;
+    }
+
+    /**
+     * Ensure that the polling frequency within the summary string for the related preference has
+     * been updated to the latest value of the {@link EditTextPreference}.
+     *
+     * @param aNewFrequencyString The latest value of the {@link EditTextPreference} in question.
+     *                            This can be passed in from an
+     *                            {@link Preference.OnPreferenceChangeListener}.
+     */
+    private void ensurePollingFrequencyInSummary(String aNewFrequencyString) {
+      // Make sure that we populate the summary string appropriately for the polling frequency
+      // preference.
+      int quantity = Integer.parseInt(aNewFrequencyString);
+      String pollingSummaryString =
+        getResources().getQuantityString(R.plurals.pref_summary_nfc_polling_frequency, quantity);
+      if (quantity > 1) {
+        pollingSummaryString = String.format(pollingSummaryString,
+                                             quantity);
+      }
+      mNFCPollingFrequencyPreference.setSummary(pollingSummaryString);
     }
   }
 }
