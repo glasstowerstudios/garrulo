@@ -7,6 +7,8 @@ import android.preference.PreferenceManager;
 import com.glasstowerstudios.garrulo.R;
 import com.glasstowerstudios.garrulo.app.GarruloApplication;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Encapsulation of preferences specific to Garrulo.
  *
@@ -26,6 +28,26 @@ public class GarruloPreferences {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(app);
 
     return prefs.getBoolean(res.getString(R.string.pref_key_nfc_onoff), false);
+  }
+
+  public boolean isNFCPollingEnabled() {
+    GarruloApplication app = GarruloApplication.getInstance();
+    Resources res = app.getResources();
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(app);
+
+    return prefs.getBoolean(res.getString(R.string.pref_key_nfc_polling_onoff), false);
+  }
+
+  public int getPollingFrequencyInMinutes() {
+    GarruloApplication app = GarruloApplication.getInstance();
+    Resources res = app.getResources();
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(app);
+
+    return prefs.getInt(res.getString(R.string.pref_key_nfc_polling_frequency), 1);
+  }
+
+  public long getPollingFrequencyInMilliseconds() {
+    return TimeUnit.MINUTES.convert(getPollingFrequencyInMinutes(), TimeUnit.MILLISECONDS);
   }
 
   public boolean shouldSuppressDefaultNotificationSound() {

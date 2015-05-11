@@ -26,14 +26,25 @@
     <string name="title_activity_settings">Settings</string>
     <string name="pref_header_general">General</string>
     <string name="pref_header_communication">Communication</string>
-    <string name="pref_key_nfc_onoff">garrulo.nfcenabled</string>
+    <string name="pref_key_nfc_onoff">garrulo.nfc.enabled</string>
     <string name="pref_title_nfc_onoff">NFC (Near-Field Communication)</string>
     <string name="pref_summary_nfc_onoff">Turn on or off near-field communication</string>
+    <string name="pref_key_nfc_polling_onoff">garrulo.nfc.polling.enabled</string>
+    <string name="pref_title_nfc_polling_onoff">NFC Polling</string>
+    <string name="pref_summary_nfc_polling_onoff">Check for NFC tags out of range of the device</string>
+    <string name="pref_key_nfc_polling_frequency">garrulo.nfc.polling.frequency</string>
+    <string name="pref_title_nfc_polling_frequency">Polling Frequency</string>
+    <string name="pref_hint_nfc_polling_frequency">Minutes between checks (1 - &#8734;)</string>
+    <plurals name="pref_summary_nfc_polling_frequency">
+        <item quantity="one">Garrulo will check every minute to ensure the tag is available</item>
+        <item quantity="other">Garrulo will check every %1$s minutes to ensure the tag is available</item>
+    </plurals>
     <string name="pref_nfc_not_available">NFC not available on this device</string>
     <string name="pref_nfc_settings_alert_title">NFC Disabled</string>
     <string name="pref_nfc_settings_alert_message">NFC is currently disabled in the system settings. Would you like to navigate to the system settings to turn it on?</string>
     <string name="pref_nfc_settings_negative">No</string>
     <string name="pref_nfc_settings_positive">Yes</string>
+
     <string name="pref_key_suppress_notification_sound">garrulo.notifications.sounds.suppress</string>
     <string name="pref_title_suppress_notification_sound">Suppress Default Notification</string>
     <string name="pref_summary_suppress_notification_sound">Turn on or off whether Garrulo should suppress the default notification when it handles a notification</string>
@@ -43,10 +54,14 @@
     <string name="pref_title_allow_ducking">Allow Volume Ducking</string>
     <string name="pref_summary_allow_ducking">Turn on or off whether other apps that use audio should be allowed to continue playing if Garrulo needs to speak if they lower their volume (i.e. allow other apps to \"duck\").</string>
 
+
     <!-- Communicator Strings -->
     <string name="communicator_intent">com.glasstowerstudios.garrulo.LISTENER_COMMUNICATION</string>
 
     <!-- Main Activity Strings -->
     <string name="service_enabled">Enabled</string>
     <string name="service_disabled">Disabled</string>
+
+    <!-- NFC Configuration Activity Strings -->
+    <string name="nfc_configuration">NFC Configuration</string>
 </resources>
