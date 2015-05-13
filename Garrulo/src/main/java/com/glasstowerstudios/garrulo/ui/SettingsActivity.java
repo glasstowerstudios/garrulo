@@ -145,7 +145,9 @@ public class SettingsActivity extends PreferenceActivity {
    * This fragment shows communication preferences only. It is used when the activity is showing a
    * two-pane settings UI.
    */
-  public static class CommunicationPreferenceFragment extends PreferenceFragment {
+  public static class CommunicationPreferenceFragment
+    extends PreferenceFragment
+    implements Preference.OnPreferenceClickListener {
     private SwitchPreference mNFCPreference;
     private EditTextPreference mNFCPollingFrequencyPreference;
 
@@ -248,6 +250,10 @@ public class SettingsActivity extends PreferenceActivity {
         (EditTextPreference) findPreference(getResources()
                                             .getString(R.string.pref_key_nfc_polling_frequency));
 
+      Preference configureNfc =
+        findPreference(getResources().getString(R.string.pref_key_configure_nfc_tag));
+      configureNfc.setOnPreferenceClickListener(this);
+
       // Set our listeners.
       mNFCPreference.setOnPreferenceChangeListener(mCheckNfcPrefsListener);
       mNFCPollingFrequencyPreference.setOnPreferenceChangeListener(mFrequencyCheckListener);
@@ -301,6 +307,20 @@ public class SettingsActivity extends PreferenceActivity {
                                              quantity);
       }
       mNFCPollingFrequencyPreference.setSummary(pollingSummaryString);
+    }
+
+    @Override
+    public boolean onPreferenceClick(Preference preference) {
+      String prefKey = preference.getKey();
+      if (prefKey.equals(getResources().getString(R.string.pref_key_configure_nfc_tag))) {
+        Intent launchConfigurationIntent =
+          new Intent(getActivity(), NfcConfigurationActivity.class);
+        startActivity(launchConfigurationIntent);
+
+        return true;
+      }
+
+      return false;
     }
   }
 }

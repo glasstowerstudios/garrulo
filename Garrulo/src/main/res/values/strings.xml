@@ -39,6 +39,9 @@
         <item quantity="one">Garrulo will check every minute to ensure the tag is available</item>
         <item quantity="other">Garrulo will check every %1$s minutes to ensure the tag is available</item>
     </plurals>
+    <string name="pref_key_configure_nfc_tag">garrulo.nfc.tag.configure</string>
+    <string name="pref_title_configure_nfc_tag">Configure NFC Tag</string>
+    <string name="pref_summary_configure_nfc_tag">Configure an individual NFC tag to work with Garrulo</string>
     <string name="pref_nfc_not_available">NFC not available on this device</string>
     <string name="pref_nfc_settings_alert_title">NFC Disabled</string>
     <string name="pref_nfc_settings_alert_message">NFC is currently disabled in the system settings. Would you like to navigate to the system settings to turn it on?</string>
@@ -64,4 +67,5 @@
 
     <!-- NFC Configuration Activity Strings -->
     <string name="nfc_configuration">NFC Configuration</string>
+    <string name="nfc_bind_tag">Bind NFC Tag</string>
 </resources>
