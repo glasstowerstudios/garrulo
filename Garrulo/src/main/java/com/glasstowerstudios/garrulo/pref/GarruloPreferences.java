@@ -43,7 +43,9 @@ public class GarruloPreferences {
     Resources res = app.getResources();
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(app);
 
-    return prefs.getInt(res.getString(R.string.pref_key_nfc_polling_frequency), 1);
+    String rawPrefValue = prefs.getString(res.getString(R.string.pref_key_nfc_polling_frequency),
+                                          "1");
+    return Integer.parseInt(rawPrefValue);
   }
 
   public long getPollingFrequencyInMilliseconds() {
