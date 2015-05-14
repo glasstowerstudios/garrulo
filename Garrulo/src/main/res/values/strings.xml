@@ -67,5 +67,8 @@
 
     <!-- NFC Configuration Activity Strings -->
     <string name="nfc_configuration">NFC Configuration</string>
+    <string name="nfc_id">NFC ID</string>
     <string name="nfc_bind_tag">Bind NFC Tag</string>
+    <string name="nfc_unbind_tag">Unbind NFC Tag</string>
+    <string name="nfc_tap_tag">Tap an NFC tag to configure it</string>
 </resources>

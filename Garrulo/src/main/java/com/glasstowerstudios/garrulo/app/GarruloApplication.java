@@ -3,6 +3,8 @@ package com.glasstowerstudios.garrulo.app;
 import android.app.Application;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcManager;
@@ -113,5 +115,23 @@ public class GarruloApplication extends Application {
     }
 
     return true;
+  }
+
+  /**
+   * Retrieve the version name of this Garrulo instance.
+   *
+   * @return The {@link PackageInfo#versionName}, if it can be retrieved.
+   */
+  public String getApplicationVersion() {
+    PackageManager mgr = getPackageManager();
+    try {
+      PackageInfo info = mgr.getPackageInfo(getPackageName(), 0);
+      return info.versionName;
+    } catch (PackageManager.NameNotFoundException e) {
+      Log.e(LOGTAG, "Unable to retrieve package information for package name: " + getPackageName(),
+            e);
+    }
+
+    return "";
   }
 }

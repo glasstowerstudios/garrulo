@@ -9,4 +9,10 @@
         android:icon="@drawable/ic_action_bind_tag"
         android:orderInCategory="1"
         android:showAsAction="always" />
+    <item
+        android:id="@+id/action_unbind_tag"
+        android:title="@string/nfc_unbind_tag"
+        android:icon="@drawable/ic_action_unbind_tag"
+        android:orderInCategory="2"
+        android:showAsAction="always" />
 </menu>
