@@ -39,9 +39,6 @@ public class GarruloMainActivity
 
   private MenuItem mTestMenuItem;
   private MenuItem mStopTestMenuItem;
-  private MenuItem mNotifyMenuItem;
-  private MenuItem mStartNotificationListenerMenuItem;
-  private MenuItem mStopNotificationListenerMenuItem;
 
   private boolean mIsListening = true;
 
@@ -59,7 +56,6 @@ public class GarruloMainActivity
     startService(new Intent(this, GarruloListenerService.class));
 
     mServiceIndicator = (TextView) findViewById(R.id.service_running_indicator);
-
     mServiceIndicator.setOnClickListener(this);
   }
 
@@ -85,17 +81,19 @@ public class GarruloMainActivity
 
     mTestMenuItem = menu.findItem(R.id.action_test);
     mStopTestMenuItem = menu.findItem(R.id.action_stop_test);
-    mNotifyMenuItem = menu.findItem(R.id.action_notify);
-    mStartNotificationListenerMenuItem = menu.findItem(R.id.action_start_notification_listener);
-    mStopNotificationListenerMenuItem = menu.findItem(R.id.action_stop_notification_listener);
+    MenuItem notifyMenuItem = menu.findItem(R.id.action_notify);
+    MenuItem startNotificationListenerMenuItem =
+      menu.findItem(R.id.action_start_notification_listener);
+    MenuItem stopNotificationListenerMenuItem =
+      menu.findItem(R.id.action_stop_notification_listener);
 
     // If we're not in DEBUG mode, then suppress the debug-only menu options.
     if (!BuildConfig.DEBUG) {
       mTestMenuItem.setVisible(false);
       mStopTestMenuItem.setVisible(false);
-      mNotifyMenuItem.setVisible(false);
-      mStartNotificationListenerMenuItem.setVisible(false);
-      mStopNotificationListenerMenuItem.setVisible(false);
+      notifyMenuItem.setVisible(false);
+      startNotificationListenerMenuItem.setVisible(false);
+      stopNotificationListenerMenuItem.setVisible(false);
     }
 
     startListening();
