@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.glasstowerstudios.garrulo.BuildConfig;
 import com.glasstowerstudios.garrulo.R;
 import com.glasstowerstudios.garrulo.app.GarruloApplication;
-import com.glasstowerstudios.garrulo.service.GarruloListenerService;
 import com.glasstowerstudios.garrulo.tts.TTSAdapter;
 import com.glasstowerstudios.garrulo.tts.TTSAdapterFactory;
 
@@ -39,9 +38,6 @@ public class GarruloMainActivity
 
   private MenuItem mTestMenuItem;
   private MenuItem mStopTestMenuItem;
-  private MenuItem mNotifyMenuItem;
-  private MenuItem mStartNotificationListenerMenuItem;
-  private MenuItem mStopNotificationListenerMenuItem;
 
   private boolean mIsListening = true;
 
@@ -56,17 +52,14 @@ public class GarruloMainActivity
     setContentView(R.layout.activity_garrulo_main);
     mAdapter = TTSAdapterFactory.getAdapter();
     mAdapter.init(this);
-    startService(new Intent(this, GarruloListenerService.class));
 
     mServiceIndicator = (TextView) findViewById(R.id.service_running_indicator);
-
     mServiceIndicator.setOnClickListener(this);
   }
 
   @Override
   protected void onDestroy() {
     super.onDestroy();
-    stopService(new Intent(this, GarruloListenerService.class));
     mAdapter.shutdown();
 
     GarruloApplication.getInstance().unsuppressAllNotificationSounds();
@@ -85,17 +78,19 @@ public class GarruloMainActivity
 
     mTestMenuItem = menu.findItem(R.id.action_test);
     mStopTestMenuItem = menu.findItem(R.id.action_stop_test);
-    mNotifyMenuItem = menu.findItem(R.id.action_notify);
-    mStartNotificationListenerMenuItem = menu.findItem(R.id.action_start_notification_listener);
-    mStopNotificationListenerMenuItem = menu.findItem(R.id.action_stop_notification_listener);
+    MenuItem notifyMenuItem = menu.findItem(R.id.action_notify);
+    MenuItem startNotificationListenerMenuItem =
+      menu.findItem(R.id.action_start_notification_listener);
+    MenuItem stopNotificationListenerMenuItem =
+      menu.findItem(R.id.action_stop_notification_listener);
 
     // If we're not in DEBUG mode, then suppress the debug-only menu options.
     if (!BuildConfig.DEBUG) {
       mTestMenuItem.setVisible(false);
       mStopTestMenuItem.setVisible(false);
-      mNotifyMenuItem.setVisible(false);
-      mStartNotificationListenerMenuItem.setVisible(false);
-      mStopNotificationListenerMenuItem.setVisible(false);
+      notifyMenuItem.setVisible(false);
+      startNotificationListenerMenuItem.setVisible(false);
+      stopNotificationListenerMenuItem.setVisible(false);
     }
 
     startListening();

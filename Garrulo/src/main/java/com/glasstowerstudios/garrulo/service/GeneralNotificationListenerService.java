@@ -6,14 +6,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
+import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.glasstowerstudios.garrulo.R;
+import com.glasstowerstudios.garrulo.comm.GarruloMessage;
 import com.glasstowerstudios.garrulo.comm.GarruloMessageHandler;
-import com.glasstowerstudios.garrulo.comm.SMSMessageHandler;
+import com.glasstowerstudios.garrulo.comm.AuditoryMessageHandler;
 
 /**
  * Main Garrulo listener service. Listens for events that Garrulo can handle on the system and
@@ -32,8 +34,7 @@ public class GeneralNotificationListenerService extends NotificationListenerServ
   @Override
   public void onCreate() {
     super.onCreate();
-    Log.d(LOGTAG, "***** DEBUG_jwir3: Creating service");
-    mMessageHandler = new SMSMessageHandler();
+    mMessageHandler = new AuditoryMessageHandler();
     mCommunicator = new GarruloListeningCommunicator();
 
     IntentFilter filter = new IntentFilter();
@@ -45,7 +46,6 @@ public class GeneralNotificationListenerService extends NotificationListenerServ
   public void onDestroy() {
     super.onDestroy();
     unregisterReceiver(mCommunicator);
-    Log.d(LOGTAG, "***** DEBUG_jwir3: Destroying GarruloListeningService");
     mMessageHandler.shutdown();
   }
 
@@ -60,12 +60,27 @@ public class GeneralNotificationListenerService extends NotificationListenerServ
                     + " +++ "
                     + sbn.getNotification().tickerText
                     + " +++ "
-                    + sbn.getPackageName());
+                    + sbn.getPackageName()
+                    + " +++ "
+                    + sbn.getTag()
+                    + " +++ "
+                    + sbn.describeContents());
+
+      // If there isn't a notification, then just return without processing it.
+      if (sbn.getNotification() == null) {
+        return;
+      }
 
       switch (NotificationCompat.getCategory(sbn.getNotification())) {
         case NotificationCompat.CATEGORY_MESSAGE:
-          // We don't want to do anything with this category, because it will be handled by the
-          // listener of SMS_RECEIVED.
+          Bundle notificationExtras = sbn.getNotification().extras;
+          String messageText = notificationExtras.getString("android.text");
+          String sender = notificationExtras.getString("android.title");
+
+          GarruloMessage message = new GarruloMessage(sender, messageText);
+          mMessageHandler.process(message);
+
+          cancelNotification(sbn);
           break;
       }
     }

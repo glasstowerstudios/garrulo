@@ -16,6 +16,8 @@ local.properties
 .idea/uiDesigner.xml
 .idea/gradle.xml
 .idea/inspectionProfiles/
+.idea/misc.xml
+.idea/runConfigurations.xml
 
 # OS/X Nonsense Files
 .DS_Store
