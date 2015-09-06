@@ -73,13 +73,6 @@ public class GeneralNotificationListenerService extends NotificationListenerServ
 
       switch (NotificationCompat.getCategory(sbn.getNotification())) {
         case NotificationCompat.CATEGORY_MESSAGE:
-//          if (sbn.getTag() != null && sbn.getTag().contains("sms")) {
-            // This is an SMS message, which will be handled by our dedicated SMS handler.
-//            break;
-//          }
-
-          // This is an MMS message, and we should handle it.
-
           Bundle notificationExtras = sbn.getNotification().extras;
           String messageText = notificationExtras.getString("android.text");
           String sender = notificationExtras.getString("android.title");
