@@ -8,7 +8,7 @@ import android.telephony.SmsMessage;
 
 import com.glasstowerstudios.garrulo.comm.GarruloMessage;
 import com.glasstowerstudios.garrulo.comm.GarruloMessageHandler;
-import com.glasstowerstudios.garrulo.comm.SMSMessageHandler;
+import com.glasstowerstudios.garrulo.comm.AuditoryMessageHandler;
 import com.glasstowerstudios.garrulo.pref.GarruloPreferences;
 
 /**
@@ -24,7 +24,7 @@ public class SMSReceiver
 
   public SMSReceiver() {
     super();
-    mMessageHandler = new SMSMessageHandler();
+    mMessageHandler = new AuditoryMessageHandler();
   }
 
   @Override
