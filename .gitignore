@@ -2,22 +2,9 @@
 .gradle
 local.properties
 
-# Per-user Project Management Stuff
+# Remove .idea stuff project folder
 *.iml
-.idea/workspace.xml
-.idea/tasks.xml
-.idea/find.xml
-.idea/libraries
-.idea/dictionaries
-.idea/dataSources.ids
-.idea/dataSources.xml
-.idea/sqlDataSources.xml
-.idea/dynamic.xml
-.idea/uiDesigner.xml
-.idea/gradle.xml
-.idea/inspectionProfiles/
-.idea/misc.xml
-.idea/runConfigurations.xml
+**/.idea/**
 
 # OS/X Nonsense Files
 .DS_Store
