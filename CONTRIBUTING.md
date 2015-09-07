@@ -10,12 +10,12 @@ In general, our process uses a branch-based approach to fixing issues. If you're
 
 1. File an issue (if one isn't already filed).
 2. Fork the repository to your github account.
-3. Create a branch for your development work: `git checkout -b issue-76`
+3. Create a branch for your development work: `git checkout -b bug/#76-short-description`
 4. Fix/add whatever you need.
   1. When you make commits, use the present-tense, imperative style for commit messages (indicate what you did, and why you did it), prefixed by the issue number (e.g. "Issue #87: Fix garbage collection so it doesn't collect as much garbage in order to prevent out of memory issues.").
   2. Try to make the first line of the commit message as short as possible, but feel free to add additional lines for more description.
   3. Make small commits frequently as you develop code that is self-contained and cohesive (this is the power of the branching model), rather than one large commit at the end.
-  4. If this is your first patch, add one more commit that adds your name to the AUTHORS.md file.
+  4. If this is your first patch, add one more commit that adds your name to the CREDITS.md file.
 5. Push your code to your repository fork.
 6. Submit a pull request from your branch on your fork to origin/master on glasstowerstudios/garrulo.
   a. Generally, there might be a couple of review iterations, but almost all pull requests are accepted.
