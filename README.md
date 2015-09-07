@@ -1,10 +1,18 @@
 Garrulo
 ==================
-A notification interceptor for Android phones and tablets.
+An auditory user interface system for safer and more convenient hands-free tasks.
 
 Introduction
 ------------------
-Garrulo is a small application designed to bring some smart functionality/programmability to notifications received on Android phones and tablets.
+Garrulo is a small application designed to allow you to interact with your phone in a more convenient way when you aren't able or don't want to utilize your hands to interact with the device.
+
+### Current Functionality Level ##
+Garrulo can currently read the following messages to you:
+  * SMS
+  * MMS
+
+Garrulo has native support for the following methods of starting the application:
+  * NFC
 
 ### Motivation ###
 The development motivation for Garrulo was because Android doesn't have a consistent, easy-to-use, cross-device/cross-manufacturer app that will read text messages and emails while driving. More specifically, for those individuals without bluetooth integration in their cars, it's difficult to find an app that will read SMS messages and can be easily turned on using NFC (as an NFC tag can be placed on the dashboard of a car and be programmed to automatically launch Garrulo when activated - see the information about "NFC Setup", below, for more details).
