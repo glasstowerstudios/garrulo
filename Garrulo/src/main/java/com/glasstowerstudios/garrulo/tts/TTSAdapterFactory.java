@@ -27,9 +27,22 @@ public abstract class TTSAdapterFactory {
                         + QueuedSpeakingAdapter.class.getSimpleName())
                .asSubclass(TTSAdapter.class);
         sInstance = clazz.newInstance();
-      } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+      } catch (ClassNotFoundException e) {
         Log.e(LOGTAG,
-              "Unable to instantiate instance of class: " + QueuedSpeakingAdapter.class.getSimpleName(),
+              "Unable to instantiate instance of class: "
+              + QueuedSpeakingAdapter.class.getSimpleName(),
+              e);
+        throw new IllegalArgumentException(e);
+      } catch (IllegalAccessException e) {
+        Log.e(LOGTAG,
+              "Unable to instantiate instance of class: "
+              + QueuedSpeakingAdapter.class.getSimpleName(),
+              e);
+        throw new IllegalArgumentException(e);
+      } catch (InstantiationException e) {
+        Log.e(LOGTAG,
+              "Unable to instantiate instance of class: "
+              + QueuedSpeakingAdapter.class.getSimpleName(),
               e);
         throw new IllegalArgumentException(e);
       }

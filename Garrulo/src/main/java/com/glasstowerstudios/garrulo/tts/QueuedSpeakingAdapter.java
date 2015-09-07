@@ -1,5 +1,6 @@
 package com.glasstowerstudios.garrulo.tts;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.AudioManager;
 import android.speech.tts.TextToSpeech;
@@ -33,11 +34,15 @@ public class QueuedSpeakingAdapter
   private String mCurrentlyBeingSpoken;
   private boolean mPaused = false;
 
+  // ConcurrentLinkedDeque is actually in the Android API as far back as API 16, but it wasn't
+  // apparently "ready". As such, we can ignore the API warnings for it, provided we don't use a
+  // min API < 16.
+  @SuppressLint("NewApi")
   @Override
   public void init(Context aContext) {
+    mSpeakingQueue = new ConcurrentLinkedDeque<>();
     mTts = new TextToSpeech(aContext, this);
     mAudioManager = (AudioManager) aContext.getSystemService(Context.AUDIO_SERVICE);
-    mSpeakingQueue = new ConcurrentLinkedDeque<>();
 
     // Start a new thread that's job is to speak whatever is in the queue every
     // 500ms.

@@ -16,5 +16,5 @@ public interface Interpreter {
    * mechanism for conversion to speech. Assuming aMessage is not empty, this will contain at least
    * one string object.
    */
-  public String[] interpretMessage(GarruloMessage aMessage);
+  String[] interpretMessage(GarruloMessage aMessage);
 }

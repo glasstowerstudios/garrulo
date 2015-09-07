@@ -22,6 +22,7 @@ public class GarruloApplication extends Application {
 
   @Override
   public void onCreate() {
+    super.onCreate();
     sInstance = this;
   }
 

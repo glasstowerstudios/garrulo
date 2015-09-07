@@ -72,7 +72,7 @@ android {
 
   defaultConfig {
     applicationId "com.glasstowerstudios.garrulo"
-    minSdkVersion 21
+    minSdkVersion 18
     targetSdkVersion 21
     versionCode project.GARRULO_VERSION_CODE as int
     versionName project.GARRULO_VERSION_NAME
