@@ -1,10 +1,6 @@
 package com.glasstowerstudios.garrulo.service;
 
 import android.annotation.TargetApi;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
@@ -12,21 +8,24 @@ import android.service.notification.StatusBarNotification;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.glasstowerstudios.garrulo.R;
+import com.glasstowerstudios.garrulo.comm.AuditoryMessageHandler;
+import com.glasstowerstudios.garrulo.comm.GarruloCommunicationChannel;
+import com.glasstowerstudios.garrulo.comm.GarruloCommunicationChannelResponder;
 import com.glasstowerstudios.garrulo.comm.GarruloMessage;
 import com.glasstowerstudios.garrulo.comm.GarruloMessageHandler;
-import com.glasstowerstudios.garrulo.comm.AuditoryMessageHandler;
 
 /**
  * Main Garrulo listener service. Listens for events that Garrulo can handle on the system and
  * dispatches a task to perform this handling.
  */
-public class GeneralNotificationListenerService extends NotificationListenerService {
+public class GeneralNotificationListenerService
+  extends NotificationListenerService
+  implements GarruloCommunicationChannelResponder {
 
   private static final String LOGTAG = GeneralNotificationListenerService.class.getSimpleName();
 
   private GarruloMessageHandler mMessageHandler;
-  private BroadcastReceiver mCommunicator;
+  private GarruloCommunicationChannel mCommChannel;
 
   // Whether or not we should be listening for notifications.
   private boolean mShouldListen = false;
@@ -35,17 +34,19 @@ public class GeneralNotificationListenerService extends NotificationListenerServ
   public void onCreate() {
     super.onCreate();
     mMessageHandler = new AuditoryMessageHandler();
-    mCommunicator = new GarruloListeningCommunicator();
-
-    IntentFilter filter = new IntentFilter();
-    filter.addAction(getResources().getString(R.string.communicator_intent));
-    registerReceiver(mCommunicator, filter);
+    mCommChannel = new GarruloCommunicationChannel(this, this);
+//    mCommunicator = new GarruloListeningCommunicator();
+//
+//    IntentFilter filter = new IntentFilter();
+//    filter.addAction(getResources().getString(R.string.communicator_intent));
+//    registerReceiver(mCommunicator, filter);
   }
 
   @Override
   public void onDestroy() {
     super.onDestroy();
-    unregisterReceiver(mCommunicator);
+//    unregisterReceiver(mCommunicator);
+    mCommChannel.disconnect();
     mMessageHandler.shutdown();
   }
 
@@ -78,11 +79,14 @@ public class GeneralNotificationListenerService extends NotificationListenerServ
           String sender = notificationExtras.getString("android.title");
 
           GarruloMessage message = new GarruloMessage(sender, messageText);
+          Log.d(LOGTAG, "***** DEBUG_jwir3: Sending message: " + messageText + ", from sender: " + sender);
           mMessageHandler.process(message);
 
           cancelNotification(sbn);
           break;
       }
+    } else {
+      Log.d(LOGTAG, "Garrulo is not listening for notifications.");
     }
   }
 
@@ -116,14 +120,13 @@ public class GeneralNotificationListenerService extends NotificationListenerServ
     mShouldListen = true;
   }
 
-  class GarruloListeningCommunicator extends BroadcastReceiver {
-    @Override
-    public void onReceive(Context aContext, Intent aIntent) {
-      if (aIntent.getStringExtra("command").equals("shutdown")) {
-        GeneralNotificationListenerService.this.stopListening();
-      } else if (aIntent.getStringExtra("command").equals("startup")) {
-        GeneralNotificationListenerService.this.startListening();
-      }
-    }
+  @Override
+  public void onShutdown() {
+    stopListening();
+  }
+
+  @Override
+  public void onStartup() {
+    startListening();
   }
 }

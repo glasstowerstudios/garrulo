@@ -12,4 +12,6 @@ public interface NdefTaskCompletedListener {
    *                    completed.
    */
   void onReadCompleted(NfcTagWrapper aTagWrapper);
+
+  void onWriteCompleted(NfcTagWrapper aTagWrapper);
 }

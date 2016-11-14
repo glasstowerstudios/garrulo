@@ -7,8 +7,6 @@ import android.preference.PreferenceManager;
 import com.glasstowerstudios.garrulo.R;
 import com.glasstowerstudios.garrulo.app.GarruloApplication;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * Encapsulation of preferences specific to Garrulo.
  *
@@ -17,6 +15,8 @@ import java.util.concurrent.TimeUnit;
  * instance of this object.
  */
 public class GarruloPreferences {
+  private static final String LOGTAG = GarruloPreferences.class.getSimpleName();
+
   private static volatile GarruloPreferences sInstance;
 
   private GarruloPreferences() {
@@ -49,7 +49,11 @@ public class GarruloPreferences {
   }
 
   public long getPollingFrequencyInMilliseconds() {
-    return TimeUnit.MINUTES.convert(getPollingFrequencyInMinutes(), TimeUnit.MILLISECONDS);
+    return 1000;
+//    int pollingInMinutes = getPollingFrequencyInMinutes();
+//    Log.d(LOGTAG, "***** DEBUG_jwir3: Polling frequency in minutes: " + pollingInMinutes);
+//    long pollingInMs = TimeUnit.MILLISECONDS.convert(pollingInMinutes, TimeUnit.MINUTES);
+//    return pollingInMs;
   }
 
   public boolean shouldSuppressDefaultNotificationSound() {

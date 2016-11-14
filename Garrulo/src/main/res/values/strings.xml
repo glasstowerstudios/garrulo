@@ -71,4 +71,8 @@
     <string name="nfc_bind_tag">Bind NFC Tag</string>
     <string name="nfc_unbind_tag">Unbind NFC Tag</string>
     <string name="nfc_tap_tag">Tap an NFC tag to configure it</string>
+    <string name="nfc_writing">Writing to NFC tag&#8230;</string>
+
+    <!-- URI Strings -->
+    <string name="garrulo_play_store_uri">https://play.google.com/store/apps/details?id=com.glasstowerstudios.garrulo</string>
 </resources>

@@ -6,7 +6,12 @@ import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.nfc.NdefMessage;
+import android.nfc.NfcAdapter;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.Menu;
@@ -17,6 +22,10 @@ import android.widget.TextView;
 import com.glasstowerstudios.garrulo.BuildConfig;
 import com.glasstowerstudios.garrulo.R;
 import com.glasstowerstudios.garrulo.app.GarruloApplication;
+import com.glasstowerstudios.garrulo.comm.GarruloCommunicationChannel;
+import com.glasstowerstudios.garrulo.comm.GarruloCommunicationChannelResponder;
+import com.glasstowerstudios.garrulo.nfc.NdefUtils;
+import com.glasstowerstudios.garrulo.nfc.NfcTagPoller;
 import com.glasstowerstudios.garrulo.tts.TTSAdapter;
 import com.glasstowerstudios.garrulo.tts.TTSAdapterFactory;
 
@@ -27,7 +36,7 @@ import com.glasstowerstudios.garrulo.tts.TTSAdapterFactory;
  */
 public class GarruloMainActivity
   extends Activity
-  implements View.OnClickListener {
+  implements View.OnClickListener, GarruloCommunicationChannelResponder {
 
   private static final String LOGTAG = GarruloMainActivity.class.getSimpleName();
 
@@ -44,23 +53,32 @@ public class GarruloMainActivity
   private TextView mServiceIndicator;
   private boolean mShouldStop = false;
 
+  private GarruloCommunicationChannel mCommChannel;
+
   private TTSAdapter mAdapter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    Intent launchIntent = getIntent();
+
     setContentView(R.layout.activity_garrulo_main);
     mAdapter = TTSAdapterFactory.getAdapter();
     mAdapter.init(this);
 
     mServiceIndicator = (TextView) findViewById(R.id.service_running_indicator);
     mServiceIndicator.setOnClickListener(this);
+
+    mCommChannel = new GarruloCommunicationChannel(this, this);
+
+    handleLaunchFromNfc(launchIntent, mCommChannel);
   }
 
   @Override
   protected void onDestroy() {
     super.onDestroy();
     mAdapter.shutdown();
+    mCommChannel.disconnect();
 
     GarruloApplication.getInstance().unsuppressAllNotificationSounds();
   }
@@ -69,6 +87,7 @@ public class GarruloMainActivity
   public void onResume() {
     super.onResume();
     ensureNotificationAccessGranted();
+    mCommChannel.communicateCommand(GarruloCommunicationChannel.GarruloCommand.STARTUP);
   }
 
   @Override
@@ -139,10 +158,6 @@ public class GarruloMainActivity
     TextView serviceRunningIndicator = (TextView) findViewById(R.id.service_running_indicator);
     serviceRunningIndicator.setTextColor(disabledTextColor);
 
-    Intent serviceStopIntent = new Intent(getResources().getString(R.string.communicator_intent));
-    serviceStopIntent.putExtra("command", "shutdown");
-    sendBroadcast(serviceStopIntent);
-
     mIsListening = false;
 
     mServiceIndicator.setBackground(getResources().getDrawable(R.drawable.garrulo_running_indicator_background_disabled));
@@ -157,10 +172,6 @@ public class GarruloMainActivity
     int enabledTextColor = getResources().getColor(R.color.active_green_text);
     TextView serviceRunningIndicator = (TextView) findViewById(R.id.service_running_indicator);
     serviceRunningIndicator.setTextColor(enabledTextColor);
-
-    Intent serviceStartIntent = new Intent(getResources().getString(R.string.communicator_intent));
-    serviceStartIntent.putExtra("command", "startup");
-    sendBroadcast(serviceStartIntent);
 
     mIsListening = true;
 
@@ -242,9 +253,39 @@ public class GarruloMainActivity
   @Override
   public void onClick(View aView) {
     if (mIsListening) {
-      stopListening();
+      mCommChannel.communicateCommand(GarruloCommunicationChannel.GarruloCommand.SHUTDOWN);
     } else {
-      startListening();
+      mCommChannel.communicateCommand(GarruloCommunicationChannel.GarruloCommand.STARTUP);
     }
+  }
+
+  private void handleLaunchFromNfc(Intent aIntent, @NonNull GarruloCommunicationChannel aChannel) {
+    Bundle extras = aIntent.getExtras();
+    if (extras != null) {
+      if (extras.keySet().contains(NfcAdapter.EXTRA_NDEF_MESSAGES)) {
+        Parcelable[] ndefMsgs = extras.getParcelableArray(NfcAdapter.EXTRA_NDEF_MESSAGES);
+        for (Parcelable parcel : ndefMsgs) {
+          if (parcel instanceof NdefMessage) {
+            NdefMessage ndefParcel = (NdefMessage) parcel;
+            if (NdefUtils.wasLaunchedFromNFC(ndefParcel)) {
+              // Start our NFC tag poller if we can retrieve the tag.
+              Tag nfcTag = (Tag) extras.get(NfcAdapter.EXTRA_TAG);
+              new NfcTagPoller(nfcTag, aChannel).start();
+              return;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @Override
+  public void onShutdown() {
+    stopListening();
+  }
+
+  @Override
+  public void onStartup() {
+    startListening();
   }
 }

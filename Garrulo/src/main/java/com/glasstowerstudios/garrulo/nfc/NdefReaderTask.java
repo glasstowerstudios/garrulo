@@ -4,7 +4,6 @@ import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.UnsupportedEncodingException;
@@ -15,36 +14,19 @@ import java.util.List;
 /**
  * Background task for reading the data from an NFC tag.
  */
-public class NdefReaderTask extends AsyncTask<Tag, Void, NfcTagWrapper> {
+public class NdefReaderTask extends NdefIOTask<Tag, NfcTagWrapper> {
 
   private static final String LOGTAG = NdefReaderTask.class.getSimpleName();
 
   private static final String UTF8 = "UTF-8";
   private static final String UTF16 = "UTF-16";
 
-  private NdefTaskCompletedListener mListener;
-
-  /**
-   * Constructs an {@link NdefReaderTask} without an associated {@link NdefTaskCompletedListener}.
-   *
-   * This is probably not what you want, given that the task won't actually do anything after
-   * completion, unless you use {@link #setNdefTaskCompletedListener(NdefTaskCompletedListener)}
-   * prior to calling {@link #execute(Object[])} on this object.
-   *
-   * @see NdefReaderTask#NdefReaderTask(NdefTaskCompletedListener)
-   */
   public NdefReaderTask() {
+    super();
   }
 
-  /**
-   * Constructs an {@link NdefReaderTask} with a listener for data after the task completes.
-   *
-   * @param aListener The {@link NdefTaskCompletedListener} which will have its
-   *                  <code>onReadCompleted()</code> method invoked after this task completes its
-   *                  execution.
-   */
   public NdefReaderTask(NdefTaskCompletedListener aListener) {
-    setNdefTaskCompletedListener(aListener);
+    super(aListener);
   }
 
   @Override
@@ -72,10 +54,7 @@ public class NdefReaderTask extends AsyncTask<Tag, Void, NfcTagWrapper> {
       }
     }
 
-    return new NfcTagWrapper(tag, data);
-
-    // Start our thread which will poll for the nfc tags' removal.
-//      new NfcTagPoller(tag).start();
+    return new NfcTagWrapper(tag, records);
   }
 
   /**
@@ -117,19 +96,7 @@ public class NdefReaderTask extends AsyncTask<Tag, Void, NfcTagWrapper> {
 
   @Override
   protected void onPostExecute(NfcTagWrapper aTagWrapper) {
-    if (mListener != null) {
-      mListener.onReadCompleted(aTagWrapper);
-    }
+    notifyListenerReadCompleted(aTagWrapper);
   }
 
-  /**
-   * Set the {@link NdefTaskCompletedListener} for this object.
-   *
-   * @param aListener The {@link NdefTaskCompletedListener} which will have its
-   *                  <code>onReadCompleted()</code> method invoked after this task completes its
-   *                  execution.
-   */
-  public void setNdefTaskCompletedListener(NdefTaskCompletedListener aListener) {
-    mListener = aListener;
-  }
 }
